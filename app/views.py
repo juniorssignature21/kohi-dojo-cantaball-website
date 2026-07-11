@@ -31,7 +31,7 @@ def home(request):
         remaining_slots = 0
         registration_progress = 0
 
-    entry_fee = Decimal(str(getattr(settings, 'REGISTRATION_FEE', '5500.00')))
+    entry_fee = Decimal(str(getattr(settings, 'REGISTRATION_FEE', '5200.00')))
     entry_fee_display = f"N{entry_fee:,.0f}"
 
     context = {
@@ -200,7 +200,7 @@ def initialize_payment(request, pk):
     }
     data = {
         'tx_ref': f'{request.user.id}_{int(timezone.now().timestamp())}',
-        'amount': f'{float(5500)}',
+        'amount': f'{float(5200)}',
         'currency': 'NGN',
         'redirect_url': request.build_absolute_uri(f'/payment-callback/?reg={registration.id}'),
         'customer': {

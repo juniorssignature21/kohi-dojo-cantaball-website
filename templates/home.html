@@ -59,7 +59,7 @@
       </div>
       <div class="stat-card glass-card fade-in stagger-3">
         <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-        <div class="stat-number" data-count="100" data-prefix="N" data-suffix="K">0</div>
+        <div class="stat-number" data-count="200" data-prefix="N" data-suffix="K">0</div>
         <div class="stat-label">Prize Pool</div>
       </div>
     </div>
@@ -93,10 +93,10 @@
         <div class="about-image">
           <img src="{% static 'images/banner1.jpg' %}" alt="Kohi Dojo indoor sports facility in Lagos">
         </div>
-        <div class="about-float-card">
+        {% comment %} <div class="about-float-card">
           <i class="fas fa-trophy"></i>
           <span>5 Years of Excellence</span>
-        </div>
+        </div> {% endcomment %}
       </div>
     </div>
   </div>
@@ -188,7 +188,7 @@
 </section>
 
 <!-- ===== SPONSORS SECTION ===== -->
-<section class="sponsors-section">
+{% comment %} <section class="sponsors-section">
   <div class="container">
     <p class="sponsors-title">Our Partners</p>
     <div class="sponsors-row fade-in">
@@ -210,7 +210,7 @@
       </svg>
     </div>
   </div>
-</section>
+</section> {% endcomment %}
 
 <!-- ===== GALLERY PREVIEW ===== -->
 <!--<section class="gallery-preview">
