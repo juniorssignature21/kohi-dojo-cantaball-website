@@ -19,12 +19,12 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-handler404 = 'app.views.custom_404_view'
-handler500 = 'app.views.custom_500_view'
-handler403 = 'app.views.custom_403_view'
-handler400 = 'app.views.custom_400_view'
-handler401 = 'app.views.custom_401_view'
-hander405 = 'app.views.custom_405_view'
+handler404 = 'authapp.views.custom_404_view'
+handler500 = 'authapp.views.custom_500_view'
+handler403 = 'authapp.views.custom_403_view'
+handler400 = 'authapp.views.custom_400_view'
+handler401 = 'authapp.views.custom_401_view'
+hander405 = 'authapp.views.custom_405_view'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
