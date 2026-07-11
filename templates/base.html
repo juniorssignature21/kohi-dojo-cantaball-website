@@ -35,6 +35,7 @@
 
   <!-- Global CSS -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/preloader.css' %}">
 
   <!-- Page-specific CSS -->
   {% block extra_css %}{% endblock %}
@@ -124,6 +125,24 @@
 </head>
 <body class="{% block page_class %}{% endblock %}">
 
+<!-- Page Preloader with Animated Logo -->
+<div id="page-preloader">
+  <div class="preloader-content">
+    <div class="preloader-logo-container">
+      <img src="{% static 'images/cantalogo.png' %}" alt="CANTABALL League" class="preloader-logo">
+    </div>
+    <div class="preloader-text">LOADING...</div>
+    <div class="preloader-progress">
+      <div class="preloader-progress-bar"></div>
+    </div>
+    <div class="preloader-dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Alert Messages -->
 {% if messages %}
 <div class="alert-container">
@@ -145,7 +164,7 @@
           <path d="M20 8L22 16H30L23.5 21L26 29L20 24L14 29L16.5 21L10 16H18L20 8Z" fill="#F59E0B"/>
         </svg>
         <span>KOHI DOJO</span> {% endcomment %}
-        <img src="{% static "images/image.png" %}" alt="">
+        <img src="{% static "images/logo.png" %}" alt="Kohi Logo" style="width: 200px;">
       </a>
 
       <nav class="header-nav">
@@ -197,8 +216,8 @@
         <!-- Brand Column -->
         <div class="footer-brand">
           <div class="footer-logo">
-            <img src="{% static 'images/image.png' %}" alt="Kohi Dojo Logo" width='50'>
-            <img src="{% static 'images/cantalogo.png' %}" alt="Kohi Dojo Logo" width='50'>
+            <img src="{% static 'images/logo.png' %}" alt="Kohi Dojo Logo" width='50' style="width: 150px;">
+            <img src="{% static 'images/cantalogo.png' %}" alt="Kohi Dojo Logo" width='50' style="width: 80px;">
 
           </div>
           <p>Abia's premier indoor CANTABALL league. Compete weekly, build your legacy, and be part of something extraordinary.</p>
@@ -263,6 +282,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
           crossorigin="anonymous"></script>
+  <script src="{% static 'js/preloader.js' %}"></script>
   <script src="{% static 'js/app.js' %}"></script>
   <script src="{% static 'js/navbar.js' %}"></script>
   <script src="{% static 'js/countdown.js' %}"></script>

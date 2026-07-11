@@ -157,6 +157,8 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app",
+    "https://kohi-cantaball.name.ng",
+    "https://*.up.railway.app",
 ]
 
 # CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS')
