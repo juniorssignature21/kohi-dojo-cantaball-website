@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}400 - Bad Request | Kohi Dojo CANTABALL League{% endblock %}
+{% block page_class %}page-error error-400{% endblock %}
+
+{% block extra_css %}
+<style>
+  .error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+  }
+
+  .error-container {
+    max-width: 600px;
+    text-align: center;
+  }
+
+  .error-code {
+    font-size: 120px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .error-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 20px 0;
+    animation: fadeIn 0.6s ease-out 0.1s both;
+  }
+
+  .error-message {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 20px 0 30px;
+    line-height: 1.6;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+  }
+
+  .error-illustration {
+    margin: 30px 0;
+    animation: fadeIn 0.6s ease-out 0.15s both;
+  }
+
+  .error-illustration svg {
+    width: 200px;
+    height: 200px;
+    filter: drop-shadow(0 10px 30px rgba(59, 130, 246, 0.2));
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeIn 0.6s ease-out 0.3s both;
+  }
+
+  .error-actions .btn {
+    margin: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .error-details {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .error-help {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+
+  .error-help strong {
+    color: #ffffff;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="error-container">
+    <h1 class="error-code">400</h1>
+    <h2 class="error-title">Bad Request</h2>
+    <p class="error-message">
+      The request couldn't be understood by the server. Please check your input and try again.
+    </p>
+
+    <div class="error-illustration">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
+        <g>
+          <path d="M 60 100 L 140 100" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 100 60 L 100 140" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary btn-lg">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+      <a href="javascript:history.back();" class="btn btn-outline btn-lg">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </a>
+    </div>
+
+    <div class="error-details">
+      <h3 style="color: #ffffff; font-size: 18px; margin-bottom: 16px;">What to Try</h3>
+      <div class="error-help">
+        <ul style="list-style: none; padding: 0; margin-top: 12px;">
+          <li style="margin-bottom: 8px;">
+            <a href="javascript:history.back();" style="color: #EA580C; text-decoration: none;">→ Go back to the previous page</a>
+          </li>
+          <li style="margin-bottom: 8px;">
+            <a href="/" style="color: #EA580C; text-decoration: none;">→ Return to home page</a>
+          </li>
+          <li style="margin-bottom: 8px;">
+            <a href="/fixtures/" style="color: #EA580C; text-decoration: none;">→ View fixtures</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

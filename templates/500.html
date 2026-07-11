@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}500 - Server Error | Kohi Dojo CANTABALL League{% endblock %}
+{% block page_class %}page-error error-500{% endblock %}
+
+{% block extra_css %}
+<style>
+  .error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+  }
+
+  .error-container {
+    max-width: 600px;
+    text-align: center;
+  }
+
+  .error-code {
+    font-size: 120px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .error-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 20px 0;
+    animation: fadeIn 0.6s ease-out 0.1s both;
+  }
+
+  .error-message {
+    font-size: 16px;
+    color: var(--muted);
+    margin: 20px 0 30px;
+    line-height: 1.6;
+    animation: fadeIn 0.6s ease-out 0.2s both;
+  }
+
+  .error-illustration {
+    margin: 30px 0;
+    animation: fadeIn 0.6s ease-out 0.15s both;
+  }
+
+  .error-illustration svg {
+    width: 200px;
+    height: 200px;
+    filter: drop-shadow(0 10px 30px rgba(220, 38, 38, 0.2));
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeIn 0.6s ease-out 0.3s both;
+  }
+
+  .error-actions .btn {
+    margin: 0;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .error-details {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .error-help {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+
+  .error-help strong {
+    color: #ffffff;
+  }
+
+  .alert-box {
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .alert-box p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <div class="error-container">
+    <h1 class="error-code">500</h1>
+    <h2 class="error-title">Server Error</h2>
+    <p class="error-message">
+      Something went wrong on our end. Our team has been notified and we're working to fix it. Please try again later.
+    </p>
+
+    <div class="error-illustration">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="95" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
+        <g>
+          <circle cx="80" cy="85" r="8" fill="#dc2626"/>
+          <circle cx="120" cy="85" r="8" fill="#dc2626"/>
+          <path d="M 75 115 Q 100 130 125 115" stroke="#dc2626" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="alert-box">
+      <p><i class="fas fa-exclamation-triangle"></i> If this problem persists, please contact support at <strong>info@kohidojo.com</strong></p>
+    </div>
+
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary btn-lg">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+      <a href="/fixtures/" class="btn btn-outline btn-lg">
+        <i class="fas fa-calendar-days"></i> View Fixtures
+      </a>
+    </div>
+
+    <div class="error-details">
+      <h3 style="color: #ffffff; font-size: 18px; margin-bottom: 16px;">What You Can Do</h3>
+      <div class="error-help">
+        <ul style="list-style: none; padding: 0; margin-top: 12px;">
+          <li style="margin-bottom: 8px;">
+            <a href="/" style="color: #EA580C; text-decoration: none;">→ Try refreshing the page</a>
+          </li>
+          <li style="margin-bottom: 8px;">
+            <a href="/register/" style="color: #EA580C; text-decoration: none;">→ Go to the home page</a>
+          </li>
+          <li style="margin-bottom: 8px;">
+            <a href="mailto:info@kohidojo.com" style="color: #EA580C; text-decoration: none;">→ Contact support</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

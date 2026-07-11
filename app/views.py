@@ -156,8 +156,8 @@ def team_details(request, foo):
 
 @login_required(login_url='login')
 def league_register(request):
-    week = get_object_or_404(LeagueWeek, status="OPEN")
-    team = get_object_or_404(Team, user=request.user)
+    week = LeagueWeek.objects.filter(status="OPEN").first()
+    team = Team.objects.filter(user=request.user).first()
     
     if not team:
         messages.error(request, 'You Must Own A Team!!')
