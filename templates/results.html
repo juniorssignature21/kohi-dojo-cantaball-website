@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Match Results - Kohi Dojo Cork Ball League{% endblock %}
+{% block page_class %}page-results{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/fixtures.css' %}">
+<style>
+  .page-results .results-filter-section {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-results .filter-bar {
+    align-items: center;
+  }
+
+  .page-results .filter-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .page-results .results-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .page-results .result-team-name {
+    overflow-wrap: anywhere;
+  }
+
+  .page-results .result-team-logo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .page-results .result-empty-state {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--muted);
+  }
+
+  .page-results .result-empty-state i {
+    color: var(--red);
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 767px) {
+    .page-results .filter-actions,
+    .page-results .filter-actions .btn {
+      width: 100%;
+    }
+
+    .page-results .results-summary {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Banner -->
+<section class="page-banner">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'app:home' %}">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span>Results</span>
+    </nav>
+    <h1>Match Results</h1>
+    <p>View completed match results and scores.</p>
+  </div>
+</section>
+
+<!-- Filters -->
+<section class="results-filter-section">
+  <div class="container">
+    <form class="filter-bar" method="get" action="{% url 'app:results' %}">
+      <div class="search-input">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          name="q"
+          class="form-input"
+          value="{{ search_query }}"
+          placeholder="Search by team name..."
+        >
+      </div>
+
+      <select class="form-select" name="week" aria-label="Filter by week">
+        <option value="">All Weeks</option>
+        {% for week in weeks %}
+          <option value="{{ week.week_number }}" {% if selected_week == week.week_number|stringformat:"s" %}selected{% endif %}>
+            Week {{ week.week_number }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select class="form-select" name="team" aria-label="Filter by team">
+        <option value="">All Teams</option>
+        {% for team in teams %}
+          <option value="{{ team.id }}" {% if selected_team == team.id|stringformat:"s" %}selected{% endif %}>
+            {{ team.team_name }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <div class="filter-actions">
+        <button type="submit" class="btn btn-primary btn-sm">
+          <i class="fas fa-filter"></i> Filter
+        </button>
+        <a href="{% url 'app:results' %}" class="btn btn-outline btn-sm">
+          <i class="fas fa-rotate-left"></i> Reset
+        </a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Results List -->
+<section class="results-section">
+  <div class="container">
+    <div class="results-summary">
+      <span>
+        {% if results_count == 1 %}
+          1 completed result
+        {% else %}
+          {{ results_count }} completed results
+        {% endif %}
+      </span>
+      {% if search_query or selected_week or selected_team %}
+        <span>Filtered view</span>
+      {% endif %}
+    </div>
+
+    <div class="week-fixtures">
+      {% for match in results %}
+        <div class="result-item fade-in">
+          <div class="result-item-header">
+            <span class="result-week">
+              Week {{ match.week.week_number }}
+              {% if match.week.season %} - {{ match.week.season.name }}{% endif %}
+            </span>
+            <span class="badge badge-success"><i class="fas fa-check"></i> Completed</span>
+          </div>
+
+          <div class="result-teams-row">
+            <div class="result-team-info home {% if match.winner_id == match.team1_id %}winner{% endif %}">
+              <div class="result-team-logo" style="background-color: {{ match.team1.team_colour }};">
+                {% if match.team1.logo %}
+                  <img src="{{ match.team1.logo.url }}" alt="{{ match.team1.team_name }} logo">
+                {% else %}
+                  {{ match.team1.team_name|slice:":2"|upper }}
+                {% endif %}
+              </div>
+              <span class="result-team-name">{{ match.team1.team_name }}</span>
+            </div>
+
+            <div class="result-score-display">
+              <span class="score {% if match.winner_id == match.team1_id %}win{% else %}loss{% endif %}">{{ match.team1_score }}</span>
+              <span class="sep">-</span>
+              <span class="score {% if match.winner_id == match.team2_id %}win{% else %}loss{% endif %}">{{ match.team2_score }}</span>
+            </div>
+
+            <div class="result-team-info away {% if match.winner_id == match.team2_id %}winner{% endif %}">
+              <div class="result-team-logo" style="background-color: {{ match.team2.team_colour }};">
+                {% if match.team2.logo %}
+                  <img src="{{ match.team2.logo.url }}" alt="{{ match.team2.team_name }} logo">
+                {% else %}
+                  {{ match.team2.team_name|slice:":2"|upper }}
+                {% endif %}
+              </div>
+              <span class="result-team-name">{{ match.team2.team_name }}</span>
+            </div>
+          </div>
+
+          <div class="result-footer">
+            <span class="result-date">
+              <i class="fas fa-calendar" style="margin-right: 6px;"></i>
+              {% if match.played_at %}
+                {{ match.played_at|date:"F j, Y, g:i A" }}
+              {% else %}
+                Date not recorded
+              {% endif %}
+            </span>
+            <span class="badge" style="background: rgba(244, 197, 66, 0.15); color: var(--gold);">
+              <i class="fas fa-trophy" style="margin-right: 4px;"></i>Winner: {{ match.winner.team_name }}
+            </span>
+          </div>
+        </div>
+      {% empty %}
+        <div class="result-empty-state fade-in">
+          <i class="fas fa-trophy"></i>
+          <p>No completed results match your filters.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

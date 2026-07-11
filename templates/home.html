@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kohi Dojo CANTABALL League - Home{% endblock %}
+{% block page_class %}page-home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+  <canvas id="particle-canvas" class="hero-canvas"></canvas>
+  <div class="hero-bg" style="background-image: url('{% static 'images/banner.png' %}')"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge fade-in">
+      <i class="fas fa-calendar"></i>
+      Season One
+    </div>
+    <h1 class="hero-title fade-in stagger-1">KOHI DOJO<br>CANTABALL LEAGUE</h1>
+    <p class="hero-subtitle fade-in stagger-2">Abia's Premier Indoor Sports League. Compete weekly. Build your legacy.</p>
+    <div class="hero-actions fade-in stagger-3">
+      <a href="{% url 'app:league_register' %}" class="btn btn-primary btn-lg">
+        <i class="fas fa-users"></i> Register Your Team
+      </a>
+      <a href="{% url 'app:fixtures' %}" class="btn btn-outline btn-lg">
+        <i class="fas fa-calendar-days"></i> View Fixtures
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ===== STATISTICS BAR ===== -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card glass-card fade-in">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-number" data-count="{{registered_count}}" data-prefix="">0</div>
+        <div class="stat-label">Teams Registered</div>
+      </div>
+      <div class="stat-card glass-card fade-in stagger-1">
+        <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+        <div class="stat-number" data-count="{{ matches }}" data-prefix="">0</div>
+        <div class="stat-label">Matches Played</div>
+      </div>
+      <div class="stat-card glass-card fade-in stagger-2">
+        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+        <div class="stat-number" data-count="{{ completed_weeks.count }}" data-prefix="">0</div>
+        <div class="stat-label">Weeks Completed</div>
+      </div>
+      <div class="stat-card glass-card fade-in stagger-3">
+        <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+        <div class="stat-number" data-count="100" data-prefix="N" data-suffix="K">0</div>
+        <div class="stat-label">Prize Pool</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT SECTION ===== -->
+<section class="about-section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-content slide-left">
+        <span class="section-label">About the League</span>
+        <h2 class="section-title">What is the CANTABALL League?</h2>
+        <p>The Kohi Dojo CANTABALL League is a weekly indoor sports competition held every Saturday at our premium facility in Lagos. Teams of two compete in fast-paced, skill-based matches that test precision, strategy, and teamwork.</p>
+        <p>Founded in 2023, the league has grown from a small gathering of enthusiasts to one of Lagos' most exciting weekly sporting events. With professional refereeing, live score tracking, and prize money for top performers, we bring the thrill of professional competition to amateur athletes.</p>
+        <ul class="feature-list">
+          <li><i class="fas fa-check-circle"></i> Weekly Saturday matches</li>
+          <li><i class="fas fa-check-circle"></i> Professional referees and scoring</li>
+          <li><i class="fas fa-check-circle"></i> Cash prizes for top 4 teams</li>
+          <li><i class="fas fa-check-circle"></i> Individual player statistics</li>
+          <li><i class="fas fa-check-circle"></i> Live match updates</li>
+        </ul>
+      </div>
+      <div class="about-image-wrap slide-right">
+        <div class="about-image">
+          <img src="{% static 'images/banner1.jpg' %}" alt="Kohi Dojo indoor sports facility in Lagos">
+        </div>
+        <div class="about-float-card">
+          <i class="fas fa-trophy"></i>
+          <span>5 Years of Excellence</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WEEKLY REGISTRATION CARD ===== -->
+<section class="reg-section">
+  <div class="container">
+    <div class="text-center fade-in">
+      <span class="section-label">Weekly Registration</span>
+      <h2 class="section-title">Register for This Week</h2>
+    </div>
+
+    <div class="reg-card fade-in stagger-1" style="margin-top: 40px;">
+      <div class="reg-card-grid">
+        {% if active_week %}
+          <div class="reg-info">
+            <div class="week-badge">
+              <i class="fas fa-calendar"></i>
+              Week {{ active_week.week_number }} — {{ active_week.registration_close|date:"F j, Y" }}
+            </div>
+
+            <div class="reg-progress">
+              <div class="reg-progress-header">
+                <span>Registration Progress</span>
+                <span>{{ registered_count }} of {{ active_week.max_teams }} Teams</span>
+              </div>
+              <div class="progress-bar" data-progress="{{ registration_progress }}">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div data-countdown="{{ active_week.registration_close|date:'c' }}">
+              <p style="font-size: 14px; color: var(--muted); margin-bottom: 12px;">Registration Closes In</p>
+              <div class="countdown">
+                <div class="countdown-box">
+                  <span class="countdown-number" data-countdown-days>00</span>
+                  <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="countdown-number" data-countdown-hours>00</span>
+                  <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="countdown-number" data-countdown-minutes>00</span>
+                  <span class="countdown-label">Mins</span>
+                </div>
+                <div class="countdown-box">
+                  <span class="countdown-number" data-countdown-seconds>00</span>
+                  <span class="countdown-label">Secs</span>
+                </div>
+              </div>
+              <div data-countdown-expired style="display: none; padding: 16px; background: var(--glass-hover); border-radius: var(--radius-sm); margin-top: 16px;">
+                <p style="color: var(--red); font-weight: 600;"><i class="fas fa-clock"></i> Registration Closed</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="reg-sidebar">
+            <div class="fee-card glass-card">
+              <h4>Entry Fee</h4>
+              <div class="fee-amount">{{ entry_fee_display }}</div>
+              <p class="fee-subtext">per team of 2 players</p>
+            </div>
+
+            <div class="slots-card glass-card">
+              <h4>Slots Remaining</h4>
+              <div class="slots-number">{{ remaining_slots }}</div>
+              <p class="slots-text">out of {{ active_week.max_teams }} total spots</p>
+              <p class="slots-urgency"><i class="fas fa-fire"></i> Register now before spots fill up!</p>
+            </div>
+
+            <a href="{% url 'app:league_register' %}" class="btn btn-primary btn-lg btn-full">
+              <i class="fas fa-users"></i> Register Your Team
+            </a>
+          </div>
+        {% else %}
+          <div class="reg-info">
+            <div class="week-badge">
+              <i class="fas fa-calendar"></i>
+              No Active Registration
+            </div>
+            <p style="margin-top: 16px; color: var(--muted);">A new weekly registration window will open soon. Please check back later.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPONSORS SECTION ===== -->
+<section class="sponsors-section">
+  <div class="container">
+    <p class="sponsors-title">Our Partners</p>
+    <div class="sponsors-row fade-in">
+      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="28" fill="white" font-family="Poppins" font-weight="700" font-size="18">SPORTSGEAR</text>
+        <text x="110" y="28" fill="#EA580C" font-family="Poppins" font-weight="700" font-size="18">PRO</text>
+      </svg>
+      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="20" fill="white" font-family="Poppins" font-weight="600" font-size="14">LAGOS FITNESS</text>
+        <text x="0" y="36" fill="#94A3B8" font-family="Poppins" font-weight="400" font-size="12">CLUB</text>
+      </svg>
+      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 8L22 16H30L23.5 21L26 29L20 24L14 29L16.5 21L10 16H18L20 8Z" fill="white" transform="scale(0.8) translate(5,5)"/>
+        <text x="35" y="28" fill="white" font-family="Poppins" font-weight="700" font-size="20" font-style="italic">NIKE</text>
+      </svg>
+      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 30L25 10L30 18L45 8L40 30H10Z" fill="white" opacity="0.8"/>
+        <text x="55" y="28" fill="white" font-family="Poppins" font-weight="400" font-size="16" font-style="italic">adidas</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY PREVIEW ===== -->
+<!--<section class="gallery-preview">
+  <div class="container">
+    <div class="fade-in">
+      <span class="section-label">Gallery</span>
+      <h2 class="section-title">Moments from the League</h2>
+    </div>
+
+    <div class="gallery-grid-preview">
+      <div class="gallery-item" data-lightbox="{% static 'images/gallery-1.jpg' %}" data-caption="Action shot">
+        <img src="{% static 'images/gallery-1.jpg' %}" alt="Gallery image 1">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+      <div class="gallery-item" data-lightbox="{% static 'images/gallery-2.jpg' %}" data-caption="Team celebration">
+        <img src="{% static 'images/gallery-2.jpg' %}" alt="Gallery image 2">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+      <div class="gallery-item" data-lightbox="{% static 'images/gallery-3.jpg' %}" data-caption="Tournament hall">
+        <img src="{% static 'images/gallery-3.jpg' %}" alt="Gallery image 3">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+      <div class="gallery-item" data-lightbox="{% static 'images/gallery-4.jpg' %}" data-caption="Player serving">
+        <img src="{% static 'images/gallery-4.jpg' %}" alt="Gallery image 4">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+    </div>
+
+    <div class="gallery-preview-btn fade-in">
+      {% comment %} <a href="{% url 'gallery' %}" class="btn btn-secondary btn-md"> {% endcomment %}
+        <i class="fas fa-images"></i> View Full Gallery
+      </a>
+    </div>
+  </div>
+</section>-->
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner home-cta">
+  <div class="container">
+    <h2 class="fade-in">Ready to Compete?</h2>
+    <p class="fade-in stagger-1">Register your team today and join Lagos' most exciting weekly sports league. Only 2 spots remaining for this week!</p>
+    <a href="{% url 'app:register' %}" class="btn btn-lg fade-in stagger-2">
+      <i class="fas fa-rocket"></i> Register Now
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/registration.js' %}"></script>
+{% endblock %}

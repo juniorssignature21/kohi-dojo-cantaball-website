@@ -1,0 +1,293 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kohi Dojo CANTABALL League - Lagos' Premier Indoor Sports League. Compete weekly, build your legacy.">
+  <meta name="keywords" content="CANTABALL, sports league, Lagos, indoor sports, tournament">
+  <meta name="author" content="Kohi Dojo">
+  <meta name="theme-color" content="#0F172A">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{% block og_title %}Kohi Dojo CANTABALL League{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Lagos' Premier Indoor Sports League{% endblock %}">
+  <meta property="og:image" content="{% static 'icons/og-image.jpg' %}">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}Kohi Dojo CANTABALL League{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Lagos' Premier Indoor Sports League{% endblock %}">
+
+  <title>{% block title %}Kohi Dojo CANTABALL League{% endblock %}</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{% static 'icons/favicon.png' %}">
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Global CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <!-- Page-specific CSS -->
+  {% block extra_css %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+  <!-- Preload hero image for homepage -->
+  {% if request.resolver_match.url_name == 'home' %}
+  <link rel="preload" as="image" href="{% static 'images/hero-bg.jpg' %}">
+  {% endif %}
+
+  <style>
+    /* Alert Container */
+    .alert-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Base Alert */
+    .alert {
+        min-width: 300px;
+        max-width: 400px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s ease, fadeOut 0.5s ease 4.5s forwards;
+    }
+
+    /* Django Message Types */
+    .alert.success {
+        background: #16a34a;
+    }
+
+    .alert.error {
+        background: #dc2626;
+    }
+
+    .alert.warning {
+        background: #f59e0b;
+        color: #111;
+    }
+
+    .alert.info {
+        background: #2563eb;
+    }
+
+    /* Close Button */
+    .close-btn {
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: 22px;
+        cursor: pointer;
+        margin-left: 15px;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+            visibility: hidden;
+        }
+    }
+  </style>
+  
+</head>
+<body class="{% block page_class %}{% endblock %}">
+
+<!-- Alert Messages -->
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            <span>{{ message }}</span>
+            <button class="close-btn">&times;</button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Navigation Header -->
+  <header class="header">
+    <div class="container">
+      <a href="{% url 'app:home' %}" class="header-logo">
+        {% comment %} <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="20" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+          <path d="M20 8L22 16H30L23.5 21L26 29L20 24L14 29L16.5 21L10 16H18L20 8Z" fill="#F59E0B"/>
+        </svg>
+        <span>KOHI DOJO</span> {% endcomment %}
+        <img src="{% static "images/image.png" %}" alt="">
+      </a>
+
+      <nav class="header-nav">
+        <a href="{% url 'app:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+        <a href="{% url 'app:fixtures' %}" class="{% if request.resolver_match.url_name == 'fixtures' %}active{% endif %}">Fixtures</a>
+        <a href="{% url 'app:results' %}" class="{% if request.resolver_match.url_name == 'results' %}active{% endif %}">Results</a>
+        <a href="{% url 'app:rules' %}" class="{% if request.resolver_match.url_name == 'rules' %}active{% endif %}">Rules</a>
+      </nav>
+
+      <div class="header-actions">
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'app:edit_team' %}" class="btn btn-secondary btn-sm">Edit Team</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">Login</a>
+        {% endif %}
+        <a href="{% url 'app:register' %}" class="btn btn-primary btn-sm">Register</a>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="{% url 'app:home' %}">Home</a>
+    <a href="{% url 'app:fixtures' %}">Fixtures</a>
+    <a href="{% url 'app:results' %}">Results</a>
+    <a href="{% url 'app:rules' %}">Rules</a>
+    {% if request.user.is_authenticated %}
+      <a href="{% url 'app:edit_team' %}" class="btn btn-secondary btn-sm">Edit Team</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">Login</a>
+    {% endif %}
+    <a href="{% url 'app:register' %}" class="btn btn-primary btn-sm">Register</a>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer (hidden on dashboard) -->
+  {% block footer %}
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="{% static 'images/image.png' %}" alt="Kohi Dojo Logo" width='50'>
+            <img src="{% static 'images/cantalogo.png' %}" alt="Kohi Dojo Logo" width='50'>
+
+          </div>
+          <p>Abia's premier indoor CANTABALL league. Compete weekly, build your legacy, and be part of something extraordinary.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="X"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <a href="{% url 'app:home' %}">Home</a>
+          <a href="{% url 'app:register' %}">Register</a>
+          <a href="{% url 'app:fixtures' %}">Fixtures</a>
+          <a href="{% url 'app:results' %}">Results</a>
+        </div>
+
+        <!-- Information -->
+        <div class="footer-links">
+          <h4>Information</h4>
+          <a href="{% url 'app:rules' %}">Rules</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4>Newsletter</h4>
+          <p>Stay updated with league news and announcements.</p>
+          <form class="newsletter-form" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+          </form>
+          <div class="footer-contact">
+            <div class="footer-contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+234 800 123 4567</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@kohidojo.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>2025 Kohi Dojo CANTABALL League. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Global JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  <script src="{% static 'js/navbar.js' %}"></script>
+  <script src="{% static 'js/countdown.js' %}"></script>
+  <script type="module" src="{% static 'js/onclicks.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.querySelectorAll(".alert").forEach(function(alert){
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+
+            // Manual close
+            alert.querySelector(".close-btn").addEventListener("click", function(){
+                alert.remove();
+            });
+
+        });
+
+    });
+</script>
+  <!-- Page-specific JavaScript -->
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

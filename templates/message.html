@@ -1,0 +1,16 @@
+{% load static %}
+<link rel="stylesheet" href="{% static "css/notification.css" %}">
+{% for message in messages %}
+  <div id="notification" popover- class="notification" role="alert" aria-live="assertive" aria-atomic="true" closedby="anny">
+      <div class="notification__icon"></div>
+      <div class="notification__body">
+        <h2 class="notification__header">{{ message.tag }}</h2>
+        <p class="notification__text"> {{ message }} </p>
+      </div>
+      <div class="notification__action">
+        <button class="button" aria-label="dismiss this notification">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+  </div>
+{% endfor %}

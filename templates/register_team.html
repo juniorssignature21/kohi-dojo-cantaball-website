@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title|default:"Register Your Team" }} - Kohi Dojo CANTABALL League{% endblock %}
+{% block page_class %}page-register{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'app:home' %}">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span>{{ page_title|default:"Register" }}</span>
+    </nav>
+    <h1>{{ page_title|default:"Register Your Team" }}</h1>
+    <p>{{ page_subtitle|default:"Create your team profile and add both players." }}</p>
+  </div>
+</section>
+
+<section class="register-section">
+  <div class="container">
+    <div class="register-grid">
+      <div class="register-form-card fade-in">
+        <h2>{{ form_title|default:"Team Registration" }}</h2>
+        <p>Fill in the team details and add exactly two players: captain and player.</p>
+
+        <form class="register-form" data-validate method="post" action="{% url form_action|default:'app:register' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="{{ teamform.team_name.id_for_label }}">Team Name <span class="required">*</span></label>
+              {{ teamform.team_name }}
+              {% for error in teamform.team_name.errors %}
+                <span class="form-error visible">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ teamform.team_colour.id_for_label }}">Team Colour <span class="required">*</span></label>
+              {{ teamform.team_colour }}
+              {% for error in teamform.team_colour.errors %}
+                <span class="form-error visible">{{ error }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ teamform.motto.id_for_label }}">Team Motto</label>
+            {{ teamform.motto }}
+            {% for error in teamform.motto.errors %}
+              <span class="form-error visible">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ teamform.logo.id_for_label }}">Team Logo</label>
+            <div class="file-upload">
+              {{ teamform.logo }}
+              <div class="file-upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Upload a PNG or JPG logo</p>
+              </div>
+            </div>
+            <div class="image-preview-container" id="logo-preview"></div>
+            {% for error in teamform.logo.errors %}
+              <span class="form-error visible">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="player-form-panel">
+            <div class="player-form-heading">
+              <span class="player-step">1</span>
+              <div>
+                <h3>Captain</h3>
+                <p>Main contact for match updates.</p>
+              </div>
+            </div>
+            {{ captainform.is_captain.as_hidden }}
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="{{ captainform.player_name.id_for_label }}">Captain Name <span class="required">*</span></label>
+                {{ captainform.player_name }}
+                {% for error in captainform.player_name.errors %}
+                  <span class="form-error visible">{{ error }}</span>
+                {% endfor %}
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="{{ captainform.phone.id_for_label }}">Captain Phone <span class="required">*</span></label>
+                {{ captainform.phone }}
+                {% for error in captainform.phone.errors %}
+                  <span class="form-error visible">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ captainform.email.id_for_label }}">Captain Email</label>
+              {{ captainform.email }}
+              {% for error in captainform.email.errors %}
+                <span class="form-error visible">{{ error }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="player-form-panel">
+            <div class="player-form-heading">
+              <span class="player-step">2</span>
+              <div>
+                <h3>Player</h3>
+                <p>Second player on the team.</p>
+              </div>
+            </div>
+            {{ playerform.is_captain.as_hidden }}
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="{{ playerform.player_name.id_for_label }}">Player Name <span class="required">*</span></label>
+                {{ playerform.player_name }}
+                {% for error in playerform.player_name.errors %}
+                  <span class="form-error visible">{{ error }}</span>
+                {% endfor %}
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="{{ playerform.phone.id_for_label }}">Player Phone <span class="required">*</span></label>
+                {{ playerform.phone }}
+                {% for error in playerform.phone.errors %}
+                  <span class="form-error visible">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="{{ playerform.email.id_for_label }}">Player Email</label>
+              {{ playerform.email }}
+              {% for error in playerform.email.errors %}
+                <span class="form-error visible">{{ error }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-full">
+            <i class="fas fa-check-circle"></i> {{ submit_label|default:"Complete Registration" }}
+          </button>
+        </form>
+      </div>
+
+      <aside class="register-sidebar fade-in stagger-1">
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-users"></i> Team Size</div>
+          <div class="card-value">2</div>
+          <div class="card-subtext">captain plus player</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-money-bill"></i> Entry Fee</div>
+          <div class="card-value">N5,000</div>
+          <div class="card-subtext">per team</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-shield-alt"></i> Team Profile</div>
+          <p>Choose a clear name, logo, and contact details so fixtures and updates are easy to manage.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container">
+    <h2>Questions?</h2>
+    <p>Check our rules page for detailed information about the league.</p>
+    <a href="{% url 'app:rules' %}" class="btn btn-lg">
+      <i class="fas fa-book"></i> View Rules
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+{% comment %} <script src="{% static 'js/registration.js' %}"></script> {% endcomment %}
+{% endblock %}

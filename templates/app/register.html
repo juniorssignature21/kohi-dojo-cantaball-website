@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register Your Team - Kohi Dojo CANTABALL League{% endblock %}
+{% block page_class %}page-register{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- Page Banner -->
+<section class="page-banner">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="{% url 'app:home' %}">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span>Register</span>
+    </nav>
+    <h1>Register Your Team</h1>
+    <p>Join the league — complete the form below to secure your spot.</p>
+  </div>
+</section>
+
+<!-- Registration Section -->
+<section class="register-section">
+  <div class="container">
+    <div class="register-grid">
+      <!-- Form -->
+      <div class="register-form-card fade-in">
+        <h2>Team Registration</h2>
+        <p>Fill in your team details. Both players must be present on match day.</p>
+
+        <form class="register-form" data-validate method="post" action="{% url 'app:register' %}">
+          {% csrf_token %}
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Team Name <span class="required">*</span></label>
+              <input type="text" class="form-input" name="team_name" placeholder="Enter your team name" data-validate="required|min:3">
+              <span class="form-error">Team name is required (min 3 characters).</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Captain (Player 1) Name <span class="required">*</span></label>
+              <input type="text" class="form-input" name="captain_name" placeholder="Full name of team captain" data-validate="required|min:3">
+              <span class="form-error">Captain name is required.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Captain Email <span class="required">*</span></label>
+              <input type="email" class="form-input" name="captain_email" placeholder="email@example.com" data-validate="required|email">
+              <span class="form-error">Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Captain Phone <span class="required">*</span></label>
+              <input type="tel" class="form-input" name="captain_phone" placeholder="+234 800 000 0000" data-validate="required|phone">
+              <span class="form-error">Please enter a valid phone number.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Player 2 Name <span class="required">*</span></label>
+              <input type="text" class="form-input" name="player2_name" placeholder="Full name of second player" data-validate="required|min:3">
+              <span class="form-error">Player 2 name is required.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Player 2 Phone <span class="required">*</span></label>
+            <input type="tel" class="form-input" name="player2_phone" placeholder="+234 800 000 0000" data-validate="required|phone">
+            <span class="form-error">Please enter a valid phone number.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Team Logo (Optional)</label>
+            <div class="file-upload">
+              <input type="file" name="team_logo" accept="image/*" data-preview="logo-preview">
+              <div class="file-upload-area">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click to upload or drag and drop<br><small>PNG, JPG up to 5MB</small></p>
+              </div>
+            </div>
+            <div class="image-preview-container" id="logo-preview"></div>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="agreement" name="agreement" required>
+            <label for="agreement">I agree to the <a href="{% url 'rules' %}">league rules and regulations</a>. Both players will be available for the match on Saturday.</label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-full">
+            <i class="fas fa-check-circle"></i> Complete Registration
+          </button>
+        </form>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="register-sidebar fade-in stagger-1">
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-calendar"></i> Current Week</div>
+          <div class="card-value">Week 5</div>
+          <div class="card-subtext">January 25, 2025</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-money-bill"></i> Entry Fee</div>
+          <div class="card-value">N5,000</div>
+          <div class="card-subtext">per team of 2</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-users"></i> Spots Filled</div>
+          <div class="progress-bar" data-progress="90">
+            <div class="progress-fill" style="width: 0%"></div>
+          </div>
+          <div class="progress-text">18 of 20 teams registered</div>
+          <div class="progress-sub"><i class="fas fa-circle" style="font-size: 6px; vertical-align: middle; margin-right: 4px;"></i> Only 2 spots left!</div>
+        </div>
+
+        <div class="sidebar-card" data-countdown="2025-01-25T12:00:00">
+          <div class="card-label"><i class="fas fa-clock"></i> Registration Closes In</div>
+          <div class="countdown">
+            <div class="countdown-box">
+              <span class="countdown-number" data-countdown-days>00</span>
+              <span class="countdown-label">Days</span>
+            </div>
+            <div class="countdown-box">
+              <span class="countdown-number" data-countdown-hours>00</span>
+              <span class="countdown-label">Hrs</span>
+            </div>
+            <div class="countdown-box">
+              <span class="countdown-number" data-countdown-minutes>00</span>
+              <span class="countdown-label">Min</span>
+            </div>
+            <div class="countdown-box">
+              <span class="countdown-number" data-countdown-seconds>00</span>
+              <span class="countdown-label">Sec</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-headset"></i> Need Help?</div>
+          <p style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Have questions about registration?</p>
+          <a href="{% url 'contact' %}"><i class="fas fa-envelope"></i> Contact Support</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-banner">
+  <div class="container">
+    <h2>Questions?</h2>
+    <p>Check our rules page for detailed information about the league.</p>
+    <a href="{% url 'rules' %}" class="btn btn-lg">
+      <i class="fas fa-book"></i> View Rules
+    </a>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/registration.js' %}"></script>
+{% endblock %}

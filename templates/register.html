@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Account - Kohi Dojo CANTABALL League{% endblock %}
+{% block page_class %}page-register{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+<style>
+  .auth-message {
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    padding: 14px 16px;
+    color: var(--white);
+    font-size: 14px;
+  }
+
+  .auth-message-error {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+
+  .auth-message-success {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.35);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="{% url 'app:home' %}">Home</a>
+      <span class="breadcrumb-separator">/</span>
+      <span>Register</span>
+    </div>
+    <h1>Create Account</h1>
+    <p>Join Kohi Dojo and manage your league registration.</p>
+  </div>
+</section>
+
+<section class="register-section">
+  <div class="container">
+    <div class="register-grid">
+      <div class="register-form-card">
+        <h2>Register</h2>
+        <p>Create your account with an email address and secure password.</p>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="auth-message auth-message-{{ message.tags }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <form class="register-form" method="post">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
+            {{ form.username }}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.email.id_for_label }}">Email Address <span class="required">*</span></label>
+            {{ form.email }}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
+            {{ form.password1 }}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
+            {{ form.password2 }}
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </button>
+        </form>
+      </div>
+
+      {% comment %} <aside class="register-sidebar">
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-shield-halved"></i> Account Access</div>
+          <div class="card-value">Secure</div>
+          <div class="card-subtext">Use your account to register teams and view league updates.</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-right-to-bracket"></i> Already Registered?</div>
+          <p class="card-subtext">Log in with your email address to continue.</p>
+          <a href="{% url 'login' %}">Go to login</a>
+        </div>
+      </aside> {% endcomment %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
