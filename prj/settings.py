@@ -173,7 +173,7 @@ CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app",
     "https://www.kohidojo-cantaball.site",
-    "https://kohi-dojo.com.ng/",
+    "https://kohi-dojo.com.ng",
     "https://*.up.railway.app",
 ]
 
