@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 
 from .forms import RegisterUserForm
@@ -38,7 +38,7 @@ def login_view(request):
             
             if next_url:
                 return redirect(next_url)
-            return redirect('app:home')
+            return redirect('store:shop')
 
         else:
             messages.success(request, 'Invalid Email or Password!!')
@@ -61,7 +61,7 @@ def register(request):
                 login(request, user)
             
             messages.success(request, 'Registration and login successful!')
-            return redirect('app:home')
+            return redirect('store:shop')
         
         else:
             errors = next(iter(form.errors.values()))[0]
@@ -73,3 +73,7 @@ def register(request):
         'form':form
     }
     return render(request, 'register.html', context)
+
+def logout_view(request):
+    logout(request)
+    return redirect('store:shop')

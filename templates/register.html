@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'store/store_base.html' %}
 {% load static %}
 
 {% block title %}Create Account - Kohi Dojo CANTABALL League{% endblock %}
@@ -6,48 +6,25 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/register.css' %}">
-<style>
-  .auth-message {
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    margin-bottom: 24px;
-    padding: 14px 16px;
-    color: var(--white);
-    font-size: 14px;
-  }
-
-  .auth-message-error {
-    background: rgba(239, 68, 68, 0.12);
-    border-color: rgba(239, 68, 68, 0.35);
-  }
-
-  .auth-message-success {
-    background: rgba(34, 197, 94, 0.12);
-    border-color: rgba(34, 197, 94, 0.35);
-  }
-</style>
 {% endblock %}
 
 {% block content %}
-
-<section class="page-banner">
+<section class="auth-page layout_padding">
   <div class="container">
-    <div class="breadcrumb">
-      <a href="{% url 'app:home' %}">Home</a>
-      <span class="breadcrumb-separator">/</span>
-      <span>Register</span>
+    <div class="heading_container heading_center auth-heading">
+      <h2>Create Account</h2>
+      <p>Join Kohi Dojo and get started in a few minutes.</p>
     </div>
-    <h1>Create Account</h1>
-    <p>Join Kohi Dojo and manage your league registration.</p>
-  </div>
-</section>
 
-<section class="register-section">
-  <div class="container">
-    <div class="register-grid">
-      <div class="register-form-card">
-        <h2>Register</h2>
-        <p>Create your account with an email address and secure password.</p>
+    <div class="auth-shell">
+      <div class="checkout-card auth-card">
+        <h4>Register</h4>
+
+        {% if form.non_field_errors %}
+          <div class="auth-message auth-message-error">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
 
         {% if messages %}
           {% for message in messages %}
@@ -57,51 +34,56 @@
           {% endfor %}
         {% endif %}
 
-        <form class="register-form" method="post">
+        <form class="auth-form" method="post">
           {% csrf_token %}
 
           <div class="form-group">
-            <label class="form-label" for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
+            <label for="{{ form.username.id_for_label }}">Username <span class="required">*</span></label>
             {{ form.username }}
+            {% if form.username.errors %}
+              <div class="field-error">{{ form.username.errors|striptags }}</div>
+            {% endif %}
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="{{ form.email.id_for_label }}">Email Address <span class="required">*</span></label>
+            <label for="{{ form.email.id_for_label }}">Email Address <span class="required">*</span></label>
             {{ form.email }}
+            {% if form.email.errors %}
+              <div class="field-error">{{ form.email.errors|striptags }}</div>
+            {% endif %}
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
+            <label for="{{ form.password1.id_for_label }}">Password <span class="required">*</span></label>
             {{ form.password1 }}
+            {% if form.password1.help_text %}
+              <div class="field-help">{{ form.password1.help_text|safe }}</div>
+            {% endif %}
+            {% if form.password1.errors %}
+              <div class="field-error">{{ form.password1.errors|striptags }}</div>
+            {% endif %}
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
+            <label for="{{ form.password2.id_for_label }}">Confirm Password <span class="required">*</span></label>
             {{ form.password2 }}
+            {% if form.password2.errors %}
+              <div class="field-error">{{ form.password2.errors|striptags }}</div>
+            {% endif %}
           </div>
 
-          <button type="submit" class="btn btn-primary btn-lg">
+          <button type="submit" class="btn btn-lg btn-full auth-submit">
             <i class="fas fa-user-plus"></i>
             Create Account
           </button>
         </form>
       </div>
 
-      {% comment %} <aside class="register-sidebar">
-        <div class="sidebar-card">
-          <div class="card-label"><i class="fas fa-shield-halved"></i> Account Access</div>
-          <div class="card-value">Secure</div>
-          <div class="card-subtext">Use your account to register teams and view league updates.</div>
-        </div>
-
-        <div class="sidebar-card">
-          <div class="card-label"><i class="fas fa-right-to-bracket"></i> Already Registered?</div>
-          <p class="card-subtext">Log in with your email address to continue.</p>
-          <a href="{% url 'login' %}">Go to login</a>
-        </div>
-      </aside> {% endcomment %}
+      <div class="auth-note">
+        <span>Already have an account?</span>
+        <a href="{% url 'login' %}">Sign In</a>
+      </div>
     </div>
   </div>
 </section>
-
 {% endblock %}

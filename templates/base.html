@@ -158,7 +158,7 @@
 <!-- Navigation Header -->
   <header class="header">
     <div class="container">
-      <a href="{% url 'app:home' %}" class="header-logo">
+      <a href="{% url 'store:shop' %}" class="header-logo">
         {% comment %} <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="20" cy="20" r="20" fill="#1E293B" stroke="#334155" stroke-width="1"/>
           <path d="M20 8L22 16H30L23.5 21L26 29L20 24L14 29L16.5 21L10 16H18L20 8Z" fill="#F59E0B"/>
@@ -172,6 +172,7 @@
         <a href="{% url 'app:fixtures' %}" class="{% if request.resolver_match.url_name == 'fixtures' %}active{% endif %}">Fixtures</a>
         <a href="{% url 'app:results' %}" class="{% if request.resolver_match.url_name == 'results' %}active{% endif %}">Results</a>
         <a href="{% url 'app:rules' %}" class="{% if request.resolver_match.url_name == 'rules' %}active{% endif %}">Rules</a>
+        <a href="{% url 'store:shop' %}" class="{% if request.resolver_match.url_name == 'rules' %}active{% endif %}">Shop</a>
       </nav>
 
       <div class="header-actions">
@@ -256,18 +257,18 @@
           <div class="footer-contact">
             <div class="footer-contact-item">
               <i class="fas fa-phone"></i>
-              <span>+234 800 123 4567</span>
+              <span><a href="tel:+234 70 4739 6357">+234 70 4739 6357</a></span>
             </div>
             <div class="footer-contact-item">
               <i class="fas fa-envelope"></i>
-              <span>info@kohidojo.com</span>
+              <span><a href="mailto:nueluks.studio@gmail.com">nueluks.studio@gmail.com</a></span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <p>2025 Kohi Dojo CANTABALL League. All Rights Reserved.</p>
+        <p>2026 Kohi Dojo CANTABALL League. All Rights Reserved.</p>
       </div>
     </div>
   </footer>

@@ -29,7 +29,8 @@ hander405 = 'authapp.views.custom_405_view'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app.urls')),
-    path('auth/', include('authapp.urls'))
+    path('auth/', include('authapp.urls')),
+    path('', include('store.urls')),
 ]
 
 # Serve static and media files (even when DEBUG=False for development)

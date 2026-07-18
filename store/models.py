@@ -27,8 +27,8 @@ ORDER_STATUS = (
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    slug = models.SlugField(unique=True, default=uuid.uuid4().hex[:8])  # Default slug using UUID
+    description = models.TextField(blank=True, null=True)
+    slug = ShortUUIDField(length=8, max_length=25, alphabet='1234567890abcdef', unique=True, editable=False)
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -48,10 +48,12 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True)
+    stock = models.PositiveIntegerField(default=0)
+    slug = ShortUUIDField(length=8, max_length=25, alphabet='1234567890abcdef', unique=True, editable=False)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        
+        if not self.slug:            
             self.slug = uuid.uuid4().hex[:8]  # Generate a unique slug using UUID
         super(Product, self).save(*args, **kwargs)
     
@@ -91,6 +93,7 @@ class Order(models.Model):
     order_status = models.CharField(max_length=100, choices=ORDER_STATUS, default="pending")
     order_id = ShortUUIDField(length=6, max_length=25, alphabet='1234567890')
     payment_id = models.CharField(max_length=1000, null=True, blank=True)
+    pick_up_date = models.DateTimeField(null=True, blank=True)
     date = models.DateTimeField(default=timezone.now)
     
     class Meta:
