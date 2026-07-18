@@ -1,5 +1,6 @@
 import Swal from './sweetalert2.esm.all.min.js';
 
+
 $(document).ready(function() {
         const Toast = Swal.mixin({
             toast: true,

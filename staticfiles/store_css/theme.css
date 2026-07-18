@@ -1,0 +1,76 @@
+:root {
+  --store-bg: #0F172A;
+  --store-blue: #1E293B;
+  --store-red: #EA580C;
+  --store-red-dark: #C2410C;
+  --store-white: #F8FAFC;
+  --store-muted: #94A3B8;
+  --store-border: #334155;
+  --store-gold: #F59E0B;
+}
+
+body {
+  color: var(--store-white);
+  background:
+    radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.14), transparent 34%),
+    linear-gradient(180deg, #0F172A 0%, #111827 58%, #1E293B 100%);
+}
+
+.hero_area {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.92));
+}
+
+.header_section .container-fluid,
+.offer_section .box,
+.footer_section {
+  background-color: var(--store-blue);
+}
+
+.header_section,
+.footer_section {
+  color: var(--store-white);
+}
+
+.custom_nav-container .navbar-nav .nav-item .nav-link,
+.user_option .user_link,
+.user_option .nav_search-btn,
+.custom_nav-container .nav_search-btn {
+  color: #1f1f1f;
+}
+
+.custom_nav-container .navbar-nav .nav-item:hover .nav-link,
+.custom_nav-container .navbar-nav .nav-item.active .nav-link,
+.user_option .user_link:hover,
+.custom_nav-container .nav_search-btn:hover,
+.user_option .cart_link:hover svg {
+  color: var(--store-red);
+}
+
+.custom_nav-container .navbar-toggler span,
+.custom_nav-container .navbar-toggler span::before,
+.custom_nav-container .navbar-toggler span::after {
+  background-color: var(--store-bg);
+}
+
+.user_option .order_online,
+.slider_section .detail-box a,
+.btn-box .btn1 {
+  background-color: var(--store-red);
+  color: var(--store-white);
+}
+
+.user_option .order_online:hover,
+.slider_section .detail-box a:hover,
+.btn-box .btn1:hover {
+  background-color: var(--store-red-dark);
+}
+
+.slider_section .carousel-indicators li.active,
+.heading_container h2 span {
+  background-color: var(--store-red);
+  color: var(--store-gold);
+}
+
+.offer_section .box .img-box {
+  border-color: var(--store-gold);
+}
