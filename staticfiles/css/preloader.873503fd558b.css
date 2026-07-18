@@ -1,0 +1,207 @@
+/**
+ * KOHI DOJO CANTABALL LEAGUE - Page Preloader
+ * Animated logo sliding from left to right during page load
+ */
+
+/* Preloader Container */
+#page-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+}
+
+/* Hidden state */
+#page-preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Preloader Content Wrapper */
+.preloader-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Logo Container */
+.preloader-logo-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo Image */
+.preloader-logo {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 30px rgba(234, 88, 12, 0.3));
+  animation: slideLogo 2s ease-in-out infinite;
+}
+
+/* Slide Animation - Left to Right */
+@keyframes slideLogo {
+  0% {
+    opacity: 0;
+    transform: translateX(-150px) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(150px) scale(0.8);
+  }
+}
+
+/* Loading Text */
+.preloader-text {
+  position: absolute;
+  bottom: 80px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 2px;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0;
+  }
+  25%, 75% {
+    opacity: 1;
+  }
+}
+
+/* Loading Dots Animation */
+.preloader-dots {
+  position: absolute;
+  bottom: 60px;
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EA580C;
+  animation: dotPulse 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Loading Progress Bar */
+.preloader-progress {
+  position: absolute;
+  bottom: 120px;
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.preloader-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #EA580C, #F59E0B);
+  border-radius: 3px;
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .preloader-logo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .preloader-text {
+    bottom: 60px;
+    font-size: 14px;
+  }
+
+  .preloader-progress {
+    bottom: 100px;
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-logo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .preloader-text {
+    bottom: 50px;
+    font-size: 12px;
+  }
+
+  .preloader-dots {
+    bottom: 30px;
+  }
+
+  .preloader-progress {
+    bottom: 80px;
+    width: 120px;
+  }
+}
