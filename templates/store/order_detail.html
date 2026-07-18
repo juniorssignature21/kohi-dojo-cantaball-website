@@ -1,0 +1,98 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<section class="checkout-section py-5">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2 style="font-size: 20px;">Order ID 
+        <strong>
+            #{{ order.order_id }}
+        </strong>
+        </h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="checkout-card">
+          <h4>User Details</h4>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label>Username</label>
+                <input type="text" class="form-control" value="@{{ request.user.username }}" placeholder="Your name" readonly>
+              </div>
+              <div class="col-md-6">
+                <label>Email</label>
+                <input type="text" class="form-control" value="{{ request.user.email }}" placeholder="Your email" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label>Payment Method</label>
+                <input type="text" class="form-control" value="{{ order.payment_method }}" placeholder="Payment Method" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label>Payment Status</label>
+                <input type="text" class="form-control" value="{{ order.payment_status }}" placeholder="Payment Status" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label>Order Status</label>
+                <input type="text" class="form-control" value="{{ order.order_status|capfirst }}" placeholder="Payment Status" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label>Date</label>
+                <input type="text" class="form-control" value="{{ order.date }}" placeholder="Payment Status" readonly>
+              </div>
+
+              <div class="col-md-6">
+                <label>Pickup Date</label>
+                <input type="text" class="form-control" value="{{ order.pick_up_date|date:'M d, Y g:i A'|default:'-' }}" placeholder="Pickup Date" readonly>
+              </div>
+
+            </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="checkout-card highlight-card">
+
+          <h4>Order Summary</h4>
+          <div class="summary-row">
+            {% for item in order_items %}
+            <span>
+                <img src="{{ item.product.image.url }}" alt="" width="30">
+            </span>
+            <strong>
+                {{ item.product.name }} x {{ item.qty }} - ₦{{ item.sub_total }}
+            </strong>
+            {% endfor %}
+          </div>
+          {% comment %} <div class="summary-row">
+            <span>Items</span>
+            <strong>₦{{ order.total }}</strong>
+          </div> {% endcomment %}
+          <div class="summary-row">
+            <span>Service Fee</span>
+            <strong>₦0.00</strong>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Fee</span>
+            <strong>₦{{ order.total }}</strong>
+          </div>
+          {% if order.payment_status == "Paid" %}
+          {% elif order.payment_status == "Failed" %}
+            <a href="{% url "store:flutterwave_payment" order.order_id %}" class="btn rounded w-100 mt-3" style="background-color: #e8d3c4;">
+              <img style="width: 250px; height: 40px; object-fit: contain;" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flutterwave_Logo.png" alt="">
+            </a>
+          {% endif %}
+          <br><br>
+            <a href="{% url "store:orders" %}">
+                &#8592; Orders
+            </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

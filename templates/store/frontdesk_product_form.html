@@ -1,0 +1,40 @@
+{% extends "./store_base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="frontdesk-simple-page layout_padding">
+  <div class="container">
+    <div class="frontdesk-simple-header">
+      <div>
+        <h2>{{ page_title }}</h2>
+        <p>Use this form to create or update a menu item.</p>
+      </div>
+      <div class="frontdesk-simple-counts">
+        <a href="{% url 'store:frontdesk_products' %}" class="btn btn-outline-light btn-sm">Back to Products</a>
+      </div>
+    </div>
+
+    <div class="frontdesk-search-card">
+      <form method="post" enctype="multipart/form-data" class="frontdesk-product-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="row g-3">
+          <div class="col-md-6">{{ form.name.label_tag }}{{ form.name }}</div>
+          <div class="col-md-6">{{ form.category.label_tag }}{{ form.category }}</div>
+          <div class="col-md-6">{{ form.price.label_tag }}{{ form.price }}</div>
+          <div class="col-md-6">{{ form.stock.label_tag }}{{ form.stock }}</div>
+          <div class="col-12">{{ form.description.label_tag }}{{ form.description }}</div>
+
+          <div class="col-12">{{ form.image.label_tag }}
+            {{ form.image }}
+          </div>
+        </div>
+        <div class="frontdesk-order-simple-actions mt-4">
+          <button type="submit" class="btn btn-orange btn-sm">{{ submit_label }}</button>
+          <a href="{% url 'store:frontdesk_products' %}" class="btn btn-outline-light btn-sm">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock content %}

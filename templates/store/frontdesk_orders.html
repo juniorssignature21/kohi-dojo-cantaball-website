@@ -1,0 +1,101 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+<section class="frontdesk-simple-page layout_padding">
+  <div class="container">
+    <div class="frontdesk-simple-header">
+      <div>
+        <h2>Frontdesk Orders</h2>
+        <p>Search orders by ID, customer, payment, or status.</p>
+      </div>
+      <div class="frontdesk-simple-counts">
+        <span><strong>{{ orders.count }}</strong> All</span>
+        <span><strong>{{ pending_count }}</strong> Pending</span>
+        <span><strong>{{ processing_count }}</strong> Processing</span>
+      </div>
+    </div>
+
+    <div class="frontdesk-search-card">
+      <div class="frontdesk-search-input">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        <input id="search-orders" type="search" class="form-control" placeholder="Search orders..." autocomplete="off">
+      </div>
+      <div id="frontdesk-loading-state" class="frontdesk-loading d-none">Loading orders...</div>
+    </div>
+
+    <div id="frontdesk-empty-state" class="frontdesk-empty-state {% if orders %}d-none{% endif %}">
+      No orders found.
+    </div>
+
+    <div id="orders-container" class="frontdesk-orders-list">
+      {% for order in orders %}
+      <article class="frontdesk-order-simple">
+        <div class="frontdesk-order-simple-top">
+          <div>
+            <p class="frontdesk-order-id">Order #{{ order.order_id }}</p>
+            <h4>{{ order.customer.username|default:"Guest" }}</h4>
+            <p class="frontdesk-order-meta">{{ order.customer.email|default:"No email" }}</p>
+          </div>
+          <div class="frontdesk-order-badges">
+            {% if order.order_status == "Delivered" %}
+              <span class="badge bg-success">{{ order.order_status }}</span>
+            {% elif order.order_status == "Processing" %}
+              <span class="badge bg-warning text-dark">{{ order.order_status }}</span>
+            {% else %}
+              <span class="badge bg-secondary">{{ order.order_status }}</span>
+            {% endif %}
+            <span class="qty-pill">{{ order.payment_status }}</span>
+          </div>
+        </div>
+
+        <div class="frontdesk-order-simple-grid">
+          <div>
+            <span>Created</span>
+            <strong>{{ order.date|date:"M d, Y" }}</strong>
+          </div>
+          <div>
+            <span>Pickup</span>
+            <strong>{{ order.pick_up_date|date:"M d, Y g:i A"|default:"-" }}</strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong>&#8358;{{ order.total|floatformat:2 }}</strong>
+          </div>
+          <div>
+            <span>Items</span>
+            <strong>{{ order.order_items.count }}</strong>
+          </div>
+        </div>
+
+        <div class="frontdesk-order-simple-actions">
+          <a href="{% url 'store:order_detail' order.order_id %}" class="btn btn-outline-light btn-sm w-100">View</a>
+          {% if order.order_status == "Processing" %}
+          <button
+            type="button"
+            class="btn btn-orange btn-sm w-100 mark-delivered-btn"
+            data-delivered-url="{% url 'store:mark_order_delivered' order.order_id %}"
+            data-order-id="{{ order.order_id }}"
+          >
+            Mark Delivered
+          </button>
+          {% elif order.order_status != "Delivered" %}
+          <form method="post" action="{% url 'store:confirm_order' order.order_id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-orange btn-sm w-100">Confirm</button>
+          </form>
+          {% else %}
+          <button type="button" class="btn btn-outline-success btn-sm w-100" disabled>Confirmed</button>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/frontdesk.js' %}"></script>
+{% endblock extra_js %}
