@@ -154,6 +154,73 @@
 
   <!-- end offer section --> {% endcomment %}
 
+  {% if event_tickets %}
+  <section class="event-ticket-ad">
+    <div class="container position-relative">
+      <div class="heading_container heading_center mb-4">
+        <div class="event-ticket-ad-badge">
+          <i class="fa fa-ticket" aria-hidden="true"></i>
+          Limited event combos
+        </div>
+        <h2>{{ event.name|default:"Event Tickets" }}</h2>
+        <p class="event-ticket-ad-sub">
+          Pick a combo ticket — food &amp; coffee included. Bring friends with your referral code and unlock free tickets.
+        </p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        {% for ticket in event_tickets %}
+        <div class="col-md-6 col-lg-4">
+          <article class="ticket-card{% if forloop.counter == 2 %} ticket-card--featured{% endif %}">
+            <div class="ticket-card-media">
+              <span class="ticket-tier-tag">{{ ticket.tier }}</span>
+              <span class="ticket-price-pill">&#8358;{{ ticket.price|floatformat:0|intcomma }}</span>
+              {% if ticket.image %}
+              <img src="{{ ticket.image.url }}" alt="{{ ticket.name }} combo">
+              {% elif ticket.image_static %}
+              <img src="{% static ticket.image_static %}" alt="{{ ticket.name }} combo">
+              {% else %}
+              <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
+              {% endif %}
+            </div>
+            <div class="ticket-card-body">
+              <h3>{{ ticket.name }}</h3>
+              <p class="ticket-combo">{{ ticket.combo_description }}</p>
+              <div class="ticket-combo-chips">
+                {% if "bun" in ticket.combo_description|lower %}
+                <span>Bun</span>
+                {% endif %}
+                {% if "sandwich" in ticket.combo_description|lower %}
+                <span>Sandwich</span>
+                {% endif %}
+                {% if "small coffee" in ticket.combo_description|lower %}
+                <span>Small coffee</span>
+                {% elif "big coffee" in ticket.combo_description|lower %}
+                <span>Big coffee</span>
+                {% elif "coffee" in ticket.combo_description|lower %}
+                <span>Coffee</span>
+                {% endif %}
+              </div>
+              <div class="ticket-stub">
+                <span class="ticket-stub-meta">Admit one</span>
+                <a class="ticket-cta" href="{% url 'store:event_tickets' %}">
+                  Grab ticket
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="event-ticket-ad-foot">
+        <a href="{% url 'store:event_tickets' %}">See referral rewards &amp; checkout →</a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
   <!-- food section -->
   <br><br>
   <section class="food_section layout_padding-bottom">

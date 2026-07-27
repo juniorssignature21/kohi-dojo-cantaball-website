@@ -1,0 +1,81 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}My Event Tickets — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="food_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2>My Event Tickets</h2>
+      <a href="{% url 'store:event_tickets' %}" class="btn btn-sm mt-2" style="background:#C2410C;color:#fff;">Buy another</a>
+    </div>
+
+    {% if request.user.referral_code %}
+    <p class="text-center mb-4">Your referral code: <strong>{{ request.user.referral_code }}</strong></p>
+    {% endif %}
+
+    <div class="table-responsive mb-5">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Ticket</th>
+            <th>Total</th>
+            <th>Referral used</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>#{{ order.order_id }}{% if order.is_free_reward %} <span class="badge bg-success">Reward</span>{% endif %}</td>
+            <td>{{ order.ticket.name }} × {{ order.qty }}</td>
+            <td>₦{{ order.total|floatformat:2|intcomma }}</td>
+            <td>{{ order.referred_by_code|default:"—" }}</td>
+            <td>{{ order.payment_status }}</td>
+            <td>{{ order.order_status }}</td>
+            <td>{{ order.date|date:"M d, Y g:i A" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" class="text-center">No event ticket orders yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="heading_container heading_center mb-3">
+      <h3>Referral rewards</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Reward</th>
+            <th>Referrals</th>
+            <th>Shawarma</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reward in rewards %}
+          <tr>
+            <td>{{ reward.event.name }}</td>
+            <td>{{ reward.reward_description }}</td>
+            <td>{{ reward.referral_count }}</td>
+            <td>{% if reward.includes_shawarma %}Yes{% else %}—{% endif %}</td>
+            <td>{{ reward.status }}</td>
+            <td>{{ reward.date|date:"M d, Y" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="text-center">No referral rewards yet. Share your code!</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock content %}

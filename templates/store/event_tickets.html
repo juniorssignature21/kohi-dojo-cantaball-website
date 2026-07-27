@@ -1,0 +1,114 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Event Tickets — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="event-ticket-ad">
+  <div class="container position-relative">
+    <div class="heading_container heading_center mb-4">
+      <div class="event-ticket-ad-badge">
+        <i class="fa fa-ticket" aria-hidden="true"></i>
+        Event combos
+      </div>
+      <h2>{{ event.name|default:"Event Tickets" }}</h2>
+      {% if event %}
+      <p class="event-ticket-ad-sub">{{ event.description }}</p>
+      {% endif %}
+    </div>
+
+    {% if referral_stats %}
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8">
+        <div class="checkout-card" style="background: rgba(30,41,59,.85); border: 1px solid rgba(234,88,12,.35); color:#e2e8f0;">
+          <h4 class="mb-2" style="color:#fdba74;">Your referral code</h4>
+          <p class="mb-1">
+            Share <strong style="letter-spacing: 2px; font-size: 1.25rem; color:#fff;">{{ referral_stats.code }}</strong>
+            so friends enter it when they buy a ticket.
+          </p>
+          <p class="mb-2" style="color:#94a3b8;">Successful referrals: <strong style="color:#fff;">{{ referral_stats.count }}</strong></p>
+          <ul class="mb-0 ps-3" style="color:#cbd5e1;">
+            <li>Bring 2 people → 1 regular ticket free</li>
+            <li>Bring 5 people → 1 regular ticket + 1 shawarma</li>
+            <li>Bring 10+ people → 1 VIP ticket + 1 shawarma</li>
+          </ul>
+          {% if referral_stats.rewards %}
+          <hr style="border-color:rgba(148,163,184,.3);">
+          <p class="mb-1"><strong>Your rewards</strong></p>
+          <ul class="mb-0 ps-3">
+            {% for r in referral_stats.rewards %}
+            <li>{{ r.reward_description }} — <em>{{ r.status }}</em></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <a href="{% url 'store:event_orders' %}" class="ticket-cta mt-3">My ticket orders</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if not event %}
+    <p class="text-center" style="color:#94a3b8;">No active event right now. Check back soon.</p>
+    {% else %}
+    <div class="row justify-content-center g-4">
+      {% for ticket in tickets %}
+      <div class="col-md-6 col-lg-4">
+        <article class="ticket-card{% if forloop.counter == 2 %} ticket-card--featured{% endif %}">
+          <div class="ticket-card-media">
+            <span class="ticket-tier-tag">{{ ticket.tier }}</span>
+            <span class="ticket-price-pill">&#8358;{{ ticket.price|floatformat:0|intcomma }}</span>
+            {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="{{ ticket.name }} combo">
+            {% elif ticket.image_static %}
+            <img src="{% static ticket.image_static %}" alt="{{ ticket.name }} combo">
+            {% else %}
+            <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
+            {% endif %}
+          </div>
+          <div class="ticket-card-body ticket-card-form">
+            <h3>{{ ticket.name }}</h3>
+            <p class="ticket-combo">{{ ticket.combo_description }}</p>
+            <div class="ticket-combo-chips">
+              {% if "bun" in ticket.combo_description|lower %}
+              <span>Bun</span>
+              {% endif %}
+              {% if "sandwich" in ticket.combo_description|lower %}
+              <span>Sandwich</span>
+              {% endif %}
+              {% if "small coffee" in ticket.combo_description|lower %}
+              <span>Small coffee</span>
+              {% elif "big coffee" in ticket.combo_description|lower %}
+              <span>Big coffee</span>
+              {% elif "coffee" in ticket.combo_description|lower %}
+              <span>Coffee</span>
+              {% endif %}
+            </div>
+            <form method="post" action="{% url 'store:create_event_order' %}">
+              {% csrf_token %}
+              <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+              <div class="mb-2">
+                <label class="form-label">Qty</label>
+                <input type="number" name="qty" value="1" min="1" class="form-control" style="max-width:100px;">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Referral code (optional)</label>
+                <input type="text" name="referred_by_code" class="form-control" placeholder="Friend's code" maxlength="10" style="text-transform:uppercase;">
+              </div>
+              <div class="ticket-stub">
+                <span class="ticket-stub-meta">Admit one</span>
+                <button type="submit" class="ticket-cta border-0">
+                  Buy ticket
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </article>
+      </div>
+      {% empty %}
+      <p class="text-center" style="color:#94a3b8;">No tickets available for this event.</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock content %}

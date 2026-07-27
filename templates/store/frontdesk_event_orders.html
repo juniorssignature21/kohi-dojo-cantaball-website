@@ -1,0 +1,93 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Frontdesk — Event Tickets{% endblock %}
+{% block content %}
+<section class="food_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2>Event Ticket Orders</h2>
+    </div>
+
+    <div class="table-responsive mb-5">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Ticket</th>
+            <th>Total</th>
+            <th>Referred by</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Reward?</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>#{{ order.order_id }}</td>
+            <td>{{ order.customer.email|default:"Guest" }}</td>
+            <td>{{ order.ticket.name }} × {{ order.qty }}</td>
+            <td>₦{{ order.total|floatformat:2|intcomma }}</td>
+            <td>{{ order.referred_by_code|default:"—" }}</td>
+            <td>{{ order.payment_status }}</td>
+            <td>{{ order.order_status }}</td>
+            <td>{% if order.is_free_reward %}Yes{% else %}—{% endif %}</td>
+            <td>{{ order.date|date:"M d, Y g:i A" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="9" class="text-center">No event orders.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="heading_container heading_center mb-3">
+      <h3>Referral rewards to fulfill</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>Referrer</th>
+            <th>Event</th>
+            <th>Reward</th>
+            <th>Count</th>
+            <th>Shawarma</th>
+            <th>Free ticket #</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reward in rewards %}
+          <tr>
+            <td>{{ reward.referrer.email }}</td>
+            <td>{{ reward.event.name }}</td>
+            <td>{{ reward.reward_description }}</td>
+            <td>{{ reward.referral_count }}</td>
+            <td>{% if reward.includes_shawarma %}Yes{% else %}—{% endif %}</td>
+            <td>{% if reward.free_ticket_order %}#{{ reward.free_ticket_order.order_id }}{% else %}—{% endif %}</td>
+            <td>{{ reward.status }}</td>
+            <td>
+              {% if reward.status != "Fulfilled" %}
+              <form method="post" action="{% url 'store:fulfill_referral_reward' reward.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm" style="background:#C2410C;color:#fff;">Mark fulfilled</button>
+              </form>
+              {% else %}
+              Done
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center">No referral rewards yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock content %}

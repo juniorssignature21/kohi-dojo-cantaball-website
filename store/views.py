@@ -17,6 +17,7 @@ import requests
 from authapp import models as accounts_models
 from store import models as store_models
 from store.forms import ProductForm
+from store.referrals import evaluate_referral_rewards, count_successful_referrals
 
 
 def _is_frontdesk(user):
@@ -64,12 +65,22 @@ def shop(request):
     products = store_models.Product.objects.all()
     cart_items = _get_cart_queryset(request, request.session.get('cart_id'))
     in_cart_product_ids = set(cart_items.values_list('product_id', flat=True))
+    event = (
+        store_models.Event.objects.filter(is_active=True)
+        .order_by("-created_at")
+        .first()
+    )
+    event_tickets = []
+    if event:
+        event_tickets = event.tickets.filter(is_purchasable=True).order_by("price")
 
     context = {
         'categories': categories,
         'products': products,
         'category': None,
         'in_cart_product_ids': in_cart_product_ids,
+        'event': event,
+        'event_tickets': event_tickets,
     }
 
     return render(request, 'store/index.html', context)
@@ -510,5 +521,234 @@ def PaymentCallback(request, order_id):
     messages.error(request, "Payment failed. Please try again.")
     return redirect("store:checkout", order_id)
 
+
+# --- Event tickets ---
+
+@login_required(login_url='login')
+def event_tickets(request):
+    event = (
+        store_models.Event.objects.filter(is_active=True)
+        .prefetch_related("tickets")
+        .order_by("-created_at")
+        .first()
+    )
+    tickets = []
+    if event:
+        tickets = event.tickets.filter(is_purchasable=True)
+
+    referral_stats = None
+    if request.user.is_authenticated and event and request.user.referral_code:
+        count = count_successful_referrals(event, request.user.referral_code)
+        rewards = store_models.ReferralReward.objects.filter(
+            referrer=request.user, event=event
+        )
+        referral_stats = {
+            "code": request.user.referral_code,
+            "count": count,
+            "rewards": rewards,
+        }
+
+    context = {
+        "event": event,
+        "tickets": tickets,
+        "referral_stats": referral_stats,
+    }
+    return render(request, "store/event_tickets.html", context)
+
+
+@login_required(login_url='login')
+@require_POST
+def create_event_order(request):
+    ticket_id = request.POST.get("ticket_id")
+    qty_raw = request.POST.get("qty", "1")
+    referred_by_code = (request.POST.get("referred_by_code") or "").strip().upper() or None
+
+    ticket = get_object_or_404(
+        store_models.EventTicket,
+        id=ticket_id,
+        is_purchasable=True,
+        event__is_active=True,
+    )
+
+    try:
+        qty = max(1, int(qty_raw))
+    except (TypeError, ValueError):
+        messages.error(request, "Invalid quantity.")
+        return redirect("store:event_tickets")
+
+    if referred_by_code:
+        referrer = accounts_models.User.objects.filter(
+            referral_code__iexact=referred_by_code
+        ).first()
+        if not referrer:
+            messages.error(request, "Invalid referral code.")
+            return redirect("store:event_tickets")
+        if referrer.id == request.user.id:
+            messages.error(request, "You cannot use your own referral code.")
+            return redirect("store:event_tickets")
+
+    unit_price = ticket.price
+    total = Decimal(unit_price) * Decimal(qty)
+
+    order = store_models.EventOrder.objects.create(
+        customer=request.user,
+        event=ticket.event,
+        ticket=ticket,
+        qty=qty,
+        unit_price=unit_price,
+        total=total,
+        referred_by_code=referred_by_code,
+        payment_status="Processing",
+        order_status="Pending",
+    )
+
+    return redirect("store:event_checkout", order.order_id)
+
+
+@login_required(login_url='login')
+def event_checkout(request, order_id):
+    order = get_object_or_404(
+        store_models.EventOrder.objects.select_related("ticket", "event", "customer"),
+        order_id=order_id,
+        customer=request.user,
+    )
+    return render(request, "store/event_checkout.html", {"order": order})
+
+
+@login_required(login_url='login')
+def event_orders(request):
+    orders = (
+        store_models.EventOrder.objects.filter(customer=request.user)
+        .select_related("ticket", "event")
+        .order_by("-date")
+    )
+    rewards = store_models.ReferralReward.objects.filter(
+        referrer=request.user
+    ).select_related("event", "free_ticket_order")
+    return render(
+        request,
+        "store/event_orders.html",
+        {"orders": orders, "rewards": rewards},
+    )
+
+
+@login_required(login_url='login')
+def FlutterWaveEventPayment(request, order_id):
+    try:
+        order = get_object_or_404(
+            store_models.EventOrder, order_id=order_id, customer=request.user
+        )
+        if order.payment_status == "Paid":
+            messages.info(request, "This ticket order is already paid.")
+            return redirect("store:event_orders")
+
+        tx_ref = str(uuid.uuid4())
+        url = "https://api.flutterwave.com/v3/payments"
+        headers = {
+            "Authorization": f"Bearer {settings.FLUTTERWAVE_SECRET_KEY}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "tx_ref": tx_ref,
+            "amount": str(order.total),
+            "currency": "NGN",
+            "redirect_url": request.build_absolute_uri(
+                reverse("store:event_payment_callback", args=[order.order_id])
+            ),
+            "customer": {
+                "email": request.user.email,
+                "name": request.user.username,
+            },
+            "customizations": {
+                "title": f"Event ticket — {order.ticket.name} (#{order.order_id})",
+            },
+        }
+
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        result = response.json()
+        if result.get("status") == "success":
+            return redirect(result["data"]["link"])
+
+        messages.error(request, result.get("message", "Payment initiation failed."))
+        return redirect("store:event_checkout", order.order_id)
+    except Exception as e:
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect("store:event_checkout", order_id)
+
+
+@login_required(login_url='login')
+def EventPaymentCallback(request, order_id):
+    status = request.GET.get("status")
+    transaction_id = request.GET.get("transaction_id")
+    order = get_object_or_404(
+        store_models.EventOrder, order_id=order_id, customer=request.user
+    )
+
+    if transaction_id and order.payment_status == "Processing":
+        if status in ["successful", "completed"]:
+            order.payment_status = "Paid"
+            order.payment_method = "Flutterwave"
+            order.payment_id = transaction_id
+            order.order_status = "Processing"
+            order.save(
+                update_fields=[
+                    "payment_status",
+                    "payment_method",
+                    "payment_id",
+                    "order_status",
+                ]
+            )
+
+            if order.ticket.stock > 0:
+                order.ticket.stock = max(0, order.ticket.stock - order.qty)
+                order.ticket.save(update_fields=["stock"])
+
+            evaluate_referral_rewards(order)
+
+            messages.success(
+                request,
+                "Payment successful. Your event ticket order is confirmed.",
+            )
+            return redirect("store:event_orders")
+
+    order.payment_status = "Failed"
+    order.save(update_fields=["payment_status"])
+    messages.error(request, "Payment failed. Please try again.")
+    return redirect("store:event_checkout", order.order_id)
+
+
+@frontdesk_required
+def frontdesk_event_orders(request):
+    orders = (
+        store_models.EventOrder.objects.select_related("customer", "ticket", "event")
+        .order_by("-date")
+    )
+    rewards = (
+        store_models.ReferralReward.objects.select_related(
+            "referrer", "event", "free_ticket_order"
+        )
+        .order_by("-date")
+    )
+    return render(
+        request,
+        "store/frontdesk_event_orders.html",
+        {"orders": orders, "rewards": rewards},
+    )
+
+
+@frontdesk_required
+@require_POST
+def fulfill_referral_reward(request, reward_id):
+    reward = get_object_or_404(store_models.ReferralReward, id=reward_id)
+    reward.status = "Fulfilled"
+    reward.save(update_fields=["status"])
+    if reward.free_ticket_order and reward.free_ticket_order.order_status != "Delivered":
+        reward.free_ticket_order.order_status = "Delivered"
+        reward.free_ticket_order.save(update_fields=["order_status"])
+    messages.success(
+        request,
+        f"Marked reward for {reward.referrer.email} as fulfilled.",
+    )
+    return redirect("store:frontdesk_event_orders")
 
 

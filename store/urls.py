@@ -24,4 +24,25 @@ urlpatterns = [
     path('frontdesk/products/', views.frontdesk_products, name='frontdesk_products'),
     path('frontdesk/products/add/', views.add_product, name='add_product'),
     path('frontdesk/products/<int:product_id>/edit/', views.edit_product, name='edit_product'),
+    # Event tickets
+    path('events/tickets/', views.event_tickets, name='event_tickets'),
+    path('events/orders/create/', views.create_event_order, name='create_event_order'),
+    path('events/checkout/<int:order_id>/', views.event_checkout, name='event_checkout'),
+    path('events/orders/', views.event_orders, name='event_orders'),
+    path(
+        'events/initialize-payment/<int:order_id>/',
+        views.FlutterWaveEventPayment,
+        name='event_flutterwave_payment',
+    ),
+    path(
+        'events/verify-payment/<int:order_id>/',
+        views.EventPaymentCallback,
+        name='event_payment_callback',
+    ),
+    path('frontdesk/events/', views.frontdesk_event_orders, name='frontdesk_event_orders'),
+    path(
+        'frontdesk/events/rewards/<int:reward_id>/fulfill/',
+        views.fulfill_referral_reward,
+        name='fulfill_referral_reward',
+    ),
 ]

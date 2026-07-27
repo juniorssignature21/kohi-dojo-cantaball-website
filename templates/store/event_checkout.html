@@ -1,0 +1,61 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Event Checkout — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="checkout-section py-5">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2 style="font-size: 20px;">Event Ticket Order
+        <strong>#{{ order.order_id }}</strong>
+      </h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="checkout-card">
+          <h4>Details</h4>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label>Username</label>
+              <input type="text" class="form-control" value="@{{ request.user.username }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Email</label>
+              <input type="text" class="form-control" value="{{ request.user.email }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Event</label>
+              <input type="text" class="form-control" value="{{ order.event.name }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Referred by code</label>
+              <input type="text" class="form-control" value="{{ order.referred_by_code|default:'—' }}" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="checkout-card highlight-card">
+          <h4>What You’ll Pay</h4>
+          <div class="summary-row">
+            <span>{{ order.ticket.name }} × {{ order.qty }}</span>
+            <strong>₦{{ order.total|floatformat:2|intcomma }}</strong>
+          </div>
+          <p class="text-muted small mt-2">{{ order.ticket.combo_description }}</p>
+          <div class="summary-row total-row">
+            <span>Total Due</span>
+            <strong>₦{{ order.total|floatformat:2|intcomma }}</strong>
+          </div>
+          {% if order.payment_status == "Paid" %}
+          <p class="mt-3 text-success">Already paid.</p>
+          {% else %}
+          <a href="{% url 'store:event_flutterwave_payment' order.order_id %}" class="btn rounded w-100 mt-3" style="background-color: #e8d3c4;">
+            <img style="width: 250px; height: 40px; object-fit: contain;" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flutterwave_Logo.png" alt="Pay with Flutterwave">
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

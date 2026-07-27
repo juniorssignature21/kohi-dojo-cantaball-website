@@ -32,6 +32,7 @@
   <!-- Custom styles for this template -->
   <link href="{% static 'store_css/style.css' %}" rel="stylesheet" />
   <link href="{% static 'store_css/theme.css' %}" rel="stylesheet" />
+  <link href="{% static 'store_css/event_tickets.css' %}" rel="stylesheet" />
   {% block extra_css %}{% endblock %}
   <!-- responsive style -->
   <link href="{% static 'store_css/responsive.css' %}" rel="stylesheet" />
@@ -106,9 +107,15 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url "store:orders" %}">Orders</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "store:event_tickets" %}">Event Tickets</a>
+              </li>
               {% if request.user.is_authenticated and request.user.role == 'ADMIN' or request.user.is_staff or request.user.is_superuser %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url "store:frontdesk_orders" %}">Frontdesk</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "store:frontdesk_event_orders" %}">Event Desk</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url "store:frontdesk_products" %}">Products</a>
