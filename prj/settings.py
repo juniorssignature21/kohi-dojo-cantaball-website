@@ -22,19 +22,30 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def _env_bool(name, default='False'):
+    return os.getenv(name, default).lower() in ('1', 'true', 'yes')
+
+
+def _env_list(name, default=''):
+    value = os.getenv(name, default)
+    if not value:
+        return []
+    return [item.strip() for item in value.split(',') if item.strip()]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-USE_SUPABASE = os.getenv('USE_SUPABASE', 'False').lower() in ('1', 'true', 'yes')
-USE_S3 = os.getenv('USE_S3', 'False').lower() in ('1', 'true', 'yes')
+USE_SUPABASE = _env_bool('USE_SUPABASE')
+USE_S3 = _env_bool('USE_S3')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('1', 'true', 'yes')
+DEBUG = _env_bool('DEBUG')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = _env_list('ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
 
 # Application definition
@@ -155,11 +166,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 if DEBUG:
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 else:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 STORAGES = {
     'default': {
-        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
+        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage' if USE_S3 else 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
         'BACKEND': STATICFILES_STORAGE,

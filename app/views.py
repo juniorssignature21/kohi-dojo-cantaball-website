@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
+from django.db.utils import OperationalError
 from django.db import transaction
 import requests
 
@@ -18,15 +19,23 @@ from .models import Team, LeagueWeek, Registration, Payment, TeamPlayer, Match
 
 
 def home(request):
-    active_week = LeagueWeek.objects.filter(status='OPEN').order_by('week_number').first()
-    matches = Match.objects.filter(played=True).count()
-    completed_weeks = LeagueWeek.objects.filter(status='CLOSED')
-    
-    if active_week:
-        registered_count = active_week.registered_count()
-        remaining_slots = 20 - int(registered_count)
-        registration_progress = min(100, int(round((registered_count / active_week.max_teams) * 100))) if active_week.max_teams else 0
-    else:
+    try:
+        active_week = LeagueWeek.objects.filter(status='OPEN').order_by('week_number').first()
+        matches = Match.objects.filter(played=True).count()
+        completed_weeks = LeagueWeek.objects.filter(status='CLOSED')
+        
+        if active_week:
+            registered_count = active_week.registered_count()
+            remaining_slots = 20 - int(registered_count)
+            registration_progress = min(100, int(round((registered_count / active_week.max_teams) * 100))) if active_week.max_teams else 0
+        else:
+            registered_count = 0
+            remaining_slots = 0
+            registration_progress = 0
+    except OperationalError:
+        active_week = None
+        matches = 0
+        completed_weeks = LeagueWeek.objects.none()
         registered_count = 0
         remaining_slots = 0
         registration_progress = 0

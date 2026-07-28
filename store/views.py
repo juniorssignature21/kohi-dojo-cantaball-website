@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.db.models import Q, Sum
+from django.db.utils import OperationalError
 from decimal import Decimal
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,6 +35,7 @@ def frontdesk_required(view_func):
     return wrapped
 
 def _get_cart_queryset(request, cart_id=None):
+    
     cart_id = cart_id or request.session.get('cart_id')
 
     if request.user.is_authenticated:
@@ -61,18 +63,26 @@ def get_cart_count(request):
 
 
 def shop(request):
-    categories = store_models.Category.objects.all()
-    products = store_models.Product.objects.all()
-    cart_items = _get_cart_queryset(request, request.session.get('cart_id'))
-    in_cart_product_ids = set(cart_items.values_list('product_id', flat=True))
-    event = (
-        store_models.Event.objects.filter(is_active=True)
-        .order_by("-created_at")
-        .first()
-    )
-    event_tickets = []
-    if event:
-        event_tickets = event.tickets.filter(is_purchasable=True).order_by("price")
+    try:
+        categories = store_models.Category.objects.all()
+        products = store_models.Product.objects.all()
+        cart_items = _get_cart_queryset(request, request.session.get('cart_id'))
+        in_cart_product_ids = set(cart_items.values_list('product_id', flat=True))
+        event = (
+            store_models.Event.objects.filter(is_active=True)
+            .order_by("-created_at")
+            .first()
+        )
+        
+        event_tickets = []
+        if event:
+            event_tickets = event.tickets.filter(is_purchasable=True).order_by("price")
+    except OperationalError:
+        categories = []
+        products = []
+        in_cart_product_ids = set()
+        event = None
+        event_tickets = []
 
     context = {
         'categories': categories,

@@ -95,10 +95,12 @@ def _build_password_reset_url(request, user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = default_token_generator.make_token(user)
     path = f"/auth/reset-password/{uid}/{token}/"
+    
     if not settings.DEBUG and settings.SITE_URL:
         base = settings.SITE_URL.rstrip('/')
     else:
         base = request.build_absolute_uri('/').rstrip('/')
+        
     return f"{base}{path}"
 
 
