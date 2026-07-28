@@ -19,6 +19,7 @@ def generate_referral_code(length=8):
 class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
+    is_marketer = models.BooleanField(default=False)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='PLAYER')
     referral_code = models.CharField(max_length=10, unique=True, blank=True, null=True)
 
@@ -29,7 +30,7 @@ class User(AbstractUser):
         if not self.username and self.email:
             self.username = self.email.split('@')[0]
 
-        if not self.referral_code:
+        if not self.referral_code and self.is_marketer:
             code = generate_referral_code()
             while User.objects.filter(referral_code=code).exclude(pk=self.pk).exists():
                 code = generate_referral_code()
