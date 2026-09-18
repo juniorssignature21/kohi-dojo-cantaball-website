@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from shortuuid.django_fields import ShortUUIDField
@@ -198,6 +200,8 @@ class EventOrder(models.Model):
     qty = models.PositiveIntegerField(default=1)
     unit_price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    attendee_name = models.CharField(max_length=150, blank=True)
+    attendee_phone = models.CharField(max_length=30, blank=True)
     referred_by_code = models.CharField(
         max_length=10,
         blank=True,
@@ -249,4 +253,60 @@ class ReferralReward(models.Model):
 
     def __str__(self):
         return f"{self.referrer.email} — {self.get_tier_display()} ({self.status})"
+
+
+PRICING_TIER = (
+    ("WORKSHOP_DAY", "Workshop-day price"),
+    ("REGULAR", "Regular price"),
+)
+
+
+class SchoolCode(models.Model):
+    """
+    Reference list of unique outreach codes handed out to partner schools
+    for the From Sketch to Scene campaign, e.g. FSS-SCHOOL01.
+    """
+
+    code = models.CharField(max_length=30, unique=True)
+    school_name = models.CharField(max_length=150, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["code"]
+
+    def __str__(self):
+        return f"{self.code} — {self.school_name}" if self.school_name else self.code
+
+
+class WorkshopRegistration(models.Model):
+    """From Sketch to Scene animation workshop registration."""
+
+    parent_name = models.CharField("Parent/Guardian name", max_length=150)
+    parent_phone = models.CharField("Parent/Guardian phone", max_length=30)
+    parent_email = models.EmailField("Parent/Guardian email", blank=True)
+    student_name = models.CharField(max_length=150)
+    student_age = models.PositiveIntegerField(blank=True, null=True)
+    pricing_tier = models.CharField(max_length=20, choices=PRICING_TIER, default="WORKSHOP_DAY")
+    interested_in_fellowship = models.BooleanField(
+        default=False,
+        help_text="Interested in the 1-year Fellowship pathway.",
+    )
+    school_code = models.CharField(
+        "School / Referral code",
+        max_length=30,
+        blank=True,
+        help_text="Code shared by the participant's school, e.g. FSS-SCHOOL01.",
+    )
+    payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS, default="Processing")
+    date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        return f"{self.student_name} — {self.get_pricing_tier_display()}"
+
+    @property
+    def price(self):
+        return Decimal("50000.00") if self.pricing_tier == "WORKSHOP_DAY" else Decimal("60000.00")
 

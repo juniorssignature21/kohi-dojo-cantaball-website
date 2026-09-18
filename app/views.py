@@ -40,7 +40,7 @@ def home(request):
         remaining_slots = 0
         registration_progress = 0
 
-    entry_fee = Decimal(str(getattr(settings, 'REGISTRATION_FEE', '3000.00')))
+    entry_fee = Decimal(str(getattr(settings, 'REGISTRATION_FEE', '1000.00')))
     entry_fee_display = f"N{entry_fee:,.0f}"
 
     context = {
@@ -207,9 +207,10 @@ def initialize_payment(request, pk):
         'Authorization': f'Bearer {secret_key}',
         'Content-Type': 'application/json',
     }
+    entry_fee = Decimal(str(getattr(settings, 'REGISTRATION_FEE', '1000.00')))
     data = {
         'tx_ref': f'{request.user.id}_{int(timezone.now().timestamp())}',
-        'amount': f'{float(3000)}',
+        'amount': f'{float(entry_fee)}',
         'currency': 'NGN',
         'redirect_url': request.build_absolute_uri(f'/payment-callback/?reg={registration.id}'),
         'customer': {
@@ -217,8 +218,8 @@ def initialize_payment(request, pk):
             'name': request.user.username,
         },
         'customizations': {
-            'title': f'CANTABALL REGISTRATION - {request.user.username}',
-            'description': 'KOHI DOJO CANTABALL LEAGUE',
+            'title': f'CANTABALL WORLD CUP REGISTRATION - {request.user.username}',
+            'description': 'KOHI DOJO CANTABALL WORLD CUP',
         },
     }
     try:
@@ -276,8 +277,12 @@ def payment_callback(request):
                     status="SUCCESS"
                 )
                 
-                messages.success(request, "Your account has been funded successfully!")
-                return redirect('app:home')
+                country_note = f" You're confirmed to represent {team.country.name}." if team.country else ""
+                messages.success(
+                    request,
+                    f"Registration confirmed for {team.team_name} — Cantaball World Cup.{country_note}",
+                )
+                return redirect('app:team', foo=team.team_name)
             else:
                 messages.error(request, "Payment verification failed. Please contact support.")
                 return redirect('app:home')

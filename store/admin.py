@@ -9,6 +9,8 @@ from .models import (
     EventTicket,
     EventOrder,
     ReferralReward,
+    WorkshopRegistration,
+    SchoolCode,
 )
 
 admin.site.register(Category)
@@ -60,7 +62,9 @@ class EventTicketAdmin(admin.ModelAdmin):
 class EventOrderAdmin(admin.ModelAdmin):
     list_display = (
         "order_id",
+        "event",
         "customer",
+        "attendee_name",
         "ticket",
         "total",
         "referred_by_code",
@@ -73,6 +77,8 @@ class EventOrderAdmin(admin.ModelAdmin):
         "order_id",
         "customer__username",
         "customer__email",
+        "attendee_name",
+        "attendee_phone",
         "referred_by_code",
     )
 
@@ -90,3 +96,29 @@ class ReferralRewardAdmin(admin.ModelAdmin):
     )
     list_filter = ("tier", "status", "includes_shawarma", "event")
     search_fields = ("referrer__email", "referrer__username", "reward_description")
+
+
+@admin.register(WorkshopRegistration)
+class WorkshopRegistrationAdmin(admin.ModelAdmin):
+    list_display = (
+        "student_name",
+        "parent_name",
+        "pricing_tier",
+        "interested_in_fellowship",
+        "school_code",
+        "payment_status",
+        "date",
+    )
+    list_filter = ("pricing_tier", "interested_in_fellowship", "payment_status", "school_code")
+    search_fields = ("student_name", "parent_name", "parent_phone", "parent_email", "school_code")
+
+
+@admin.register(SchoolCode)
+class SchoolCodeAdmin(admin.ModelAdmin):
+    list_display = ("code", "school_name", "is_active", "registration_count")
+    list_editable = ("school_name", "is_active")
+    search_fields = ("code", "school_name")
+
+    def registration_count(self, obj):
+        return WorkshopRegistration.objects.filter(school_code__iexact=obj.code).count()
+    registration_count.short_description = "Registrations"

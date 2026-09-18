@@ -1,0 +1,88 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% block title %}From Sketch to Scene — Animation Workshop — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="event-ticket-ad">
+  <div class="container position-relative">
+    <div class="heading_container heading_center mb-4">
+      <div class="event-ticket-ad-badge">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        Animation Workshop
+      </div>
+      <h2>From Sketch to Scene</h2>
+      <p class="event-ticket-ad-sub">
+        A hands-on creative animation workshop for students, hosted by Kohi Dojo × NueLuks Studio
+        as part of the Osisioma Relaunch — from your first sketch to a finished animated scene.
+      </p>
+    </div>
+
+    <div class="row justify-content-center g-4 mb-5">
+      <div class="col-lg-9">
+        <div class="checkout-card" style="background: rgba(30,41,59,.85); border: 1px solid rgba(234,88,12,.35); color:#e2e8f0;">
+          <h4 class="mb-3" style="color:#fdba74;">What students will experience</h4>
+          <ul class="mb-0 ps-3" style="color:#cbd5e1;">
+            <li>Character and scene sketching fundamentals.</li>
+            <li>Storyboarding a short animated sequence.</li>
+            <li>Bringing a sketch to life as a finished animated scene.</li>
+            <li>Guidance from working creatives at Kohi Dojo × NueLuks Studio.</li>
+            <li>A shared showcase moment during the Osisioma Relaunch.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center g-4 mb-5">
+      <div class="col-md-6 col-lg-4">
+        <article class="ticket-card">
+          <div class="ticket-card-body ticket-card-form">
+            <h3>Workshop-day price</h3>
+            <p class="ticket-combo">Register and pay on the day of the workshop.</p>
+            <div class="ticket-stub">
+              <span class="ticket-stub-meta">Per student</span>
+              <span class="ticket-price-pill" style="position:static;">&#8358;50,000</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <article class="ticket-card ticket-card--featured">
+          <div class="ticket-card-body ticket-card-form">
+            <h3>Regular price</h3>
+            <p class="ticket-combo">Standard workshop registration price.</p>
+            <div class="ticket-stub">
+              <span class="ticket-stub-meta">Per student</span>
+              <span class="ticket-price-pill" style="position:static;">&#8358;60,000</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-8">
+        <div class="checkout-card" style="background: rgba(30,41,59,.85); border: 1px solid rgba(234,88,12,.35); color:#e2e8f0;">
+          <h4 class="mb-2" style="color:#fdba74;">1-Year Fellowship pathway</h4>
+          <p class="mb-0" style="color:#cbd5e1;">
+            Students who show real interest and promise during the workshop can continue into
+            Kohi Dojo's 1-year Animation Fellowship — an extended, mentored pathway for going
+            deeper into character design, storytelling and animation production. Tick the
+            fellowship interest box on the registration form and our team will follow up.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mb-4">
+      <a href="{% url 'store:workshop_register' %}" class="ticket-cta">
+        Register for the workshop
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+
+    <p class="text-center" style="color:#94a3b8;">
+      Coming through a partner school? Ask them for your school code — it helps us track your
+      registration back to your school.
+    </p>
+  </div>
+</section>
+{% endblock content %}

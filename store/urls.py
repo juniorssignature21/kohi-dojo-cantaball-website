@@ -45,4 +45,11 @@ urlpatterns = [
         views.fulfill_referral_reward,
         name='fulfill_referral_reward',
     ),
+    # Animation workshop — From Sketch to Scene
+    path('workshop/', views.workshop_info, name='workshop_info'),
+    path('workshop/register/', views.workshop_register, name='workshop_register'),
+    path('workshop/register/<int:pk>/done/', views.workshop_register_done, name='workshop_register_done'),
+    path('frontdesk/workshop/', views.frontdesk_workshop_registrations, name='frontdesk_workshop_registrations'),
+    # About
+    path('about/', views.about, name='about'),
 ]

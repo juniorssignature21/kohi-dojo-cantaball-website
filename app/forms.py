@@ -1,11 +1,12 @@
 from .models import (
-    Team, 
+    Team,
     TeamPlayer,
     Season,
     LeagueWeek,
     Registration,
     Payment,
-    Match                  
+    Match,
+    CountrySlot,
 )
 
 from django import forms
@@ -31,9 +32,35 @@ class TeamForm(forms.ModelForm):
             'data-preview': 'logo-preview',
         })
 
+        # Only show countries that are still open. When editing an existing
+        # team, keep its already-selected country selectable too.
+        available = CountrySlot.objects.filter(is_active=True)
+        keep_ids = list(available.values_list('id', flat=True))
+        if self.instance and self.instance.pk and self.instance.country_id:
+            keep_ids.append(self.instance.country_id)
+        self.fields['country'].queryset = CountrySlot.objects.filter(id__in=keep_ids)
+        self.fields['country'].required = True
+        self.fields['country'].empty_label = "Select a country"
+        self.fields['country'].widget.attrs.update({
+            'class': 'form-input',
+        })
+        self.fields['country'].label = "Country You Will Represent"
+
+    def clean_country(self):
+        country = self.cleaned_data.get('country')
+        if not country:
+            raise forms.ValidationError("Please select the country you will represent.")
+
+        already_taken = country.pk == getattr(self.instance, 'country_id', None)
+        if not already_taken and not country.is_available():
+            raise forms.ValidationError(
+                f"{country.name} already has a representative. Please choose another country."
+            )
+        return country
+
     class Meta:
         model = Team
-        fields = ['team_name', 'logo', 'team_colour', 'motto']
+        fields = ['team_name', 'logo', 'team_colour', 'motto', 'country']
         
 
 class TeamPlayerForm(forms.ModelForm):

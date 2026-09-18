@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, Count
 from django.db.utils import OperationalError
 from decimal import Decimal
 from django.contrib import messages
@@ -17,7 +17,7 @@ import requests
 
 from authapp import models as accounts_models
 from store import models as store_models
-from store.forms import ProductForm
+from store.forms import ProductForm, WorkshopRegistrationForm
 from store.referrals import evaluate_referral_rewards, count_successful_referrals
 
 
@@ -571,6 +571,8 @@ def event_tickets(request):
 def create_event_order(request):
     ticket_id = request.POST.get("ticket_id")
     qty_raw = request.POST.get("qty", "1")
+    attendee_name = (request.POST.get("attendee_name") or "").strip()
+    attendee_phone = (request.POST.get("attendee_phone") or "").strip()
     referred_by_code = (request.POST.get("referred_by_code") or "").strip().upper() or None
 
     ticket = get_object_or_404(
@@ -579,6 +581,10 @@ def create_event_order(request):
         is_purchasable=True,
         event__is_active=True,
     )
+
+    if not attendee_name or not attendee_phone:
+        messages.error(request, "Please enter the attendee's name and phone number.")
+        return redirect("store:event_tickets")
 
     try:
         qty = max(1, int(qty_raw))
@@ -607,6 +613,8 @@ def create_event_order(request):
         qty=qty,
         unit_price=unit_price,
         total=total,
+        attendee_name=attendee_name,
+        attendee_phone=attendee_phone,
         referred_by_code=referred_by_code,
         payment_status="Processing",
         order_status="Pending",
@@ -760,5 +768,62 @@ def fulfill_referral_reward(request, reward_id):
         f"Marked reward for {reward.referrer.email} as fulfilled.",
     )
     return redirect("store:frontdesk_event_orders")
+
+
+# --- Animation workshop (From Sketch to Scene) ---
+
+def workshop_info(request):
+    return render(request, "store/workshop_info.html")
+
+
+def workshop_register(request):
+    if request.method == "POST":
+        form = WorkshopRegistrationForm(request.POST)
+        if form.is_valid():
+            registration = form.save()
+            messages.success(
+                request,
+                f"{registration.student_name} is registered for From Sketch to Scene.",
+            )
+            return redirect("store:workshop_register_done", pk=registration.id)
+    else:
+        form = WorkshopRegistrationForm()
+
+    return render(request, "store/workshop_register.html", {"form": form})
+
+
+def workshop_register_done(request, pk):
+    registration = get_object_or_404(store_models.WorkshopRegistration, pk=pk)
+    return render(request, "store/workshop_register_done.html", {"registration": registration})
+
+
+@frontdesk_required
+def frontdesk_workshop_registrations(request):
+    registrations = store_models.WorkshopRegistration.objects.all().order_by("-date")
+
+    school_names = {
+        s.code.upper(): s.school_name
+        for s in store_models.SchoolCode.objects.all()
+    }
+    school_report = list(
+        registrations.exclude(school_code="")
+        .values("school_code")
+        .annotate(count=Count("id"))
+        .order_by("-count", "school_code")
+    )
+    for row in school_report:
+        row["school_name"] = school_names.get(row["school_code"].upper(), "")
+
+    return render(
+        request,
+        "store/frontdesk_workshop_registrations.html",
+        {"registrations": registrations, "school_report": school_report},
+    )
+
+
+# --- About ---
+
+def about(request):
+    return render(request, "store/about.html")
 
 
