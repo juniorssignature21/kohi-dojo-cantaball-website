@@ -19,7 +19,9 @@
         <thead>
           <tr>
             <th>Order</th>
-            <th>Ticket</th>
+            <th>Event</th>
+            <th>Pass</th>
+            <th>Attendee</th>
             <th>Total</th>
             <th>Referral used</th>
             <th>Payment</th>
@@ -31,7 +33,9 @@
           {% for order in orders %}
           <tr>
             <td>#{{ order.order_id }}{% if order.is_free_reward %} <span class="badge bg-success">Reward</span>{% endif %}</td>
+            <td>{{ order.event.name }}</td>
             <td>{{ order.ticket.name }} × {{ order.qty }}</td>
+            <td>{{ order.attendee_name|default:"—" }}</td>
             <td>₦{{ order.total|floatformat:2|intcomma }}</td>
             <td>{{ order.referred_by_code|default:"—" }}</td>
             <td>{{ order.payment_status }}</td>
@@ -39,7 +43,7 @@
             <td>{{ order.date|date:"M d, Y g:i A" }}</td>
           </tr>
           {% empty %}
-          <tr><td colspan="7" class="text-center">No event ticket orders yet.</td></tr>
+          <tr><td colspan="9" class="text-center">No event ticket orders yet.</td></tr>
           {% endfor %}
         </tbody>
       </table>

@@ -105,10 +105,22 @@
                 <a class="nav-link" href="{% url "store:shop" %}">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "store:orders" %}">Orders</a>
+                <a class="nav-link" href="{% url "store:shop" %}#food_section">Order From Kohi</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "store:event_tickets" %}">Event Tickets</a>
+                <a class="nav-link" href="{% url "store:event_tickets" %}">Osisioma Relaunch</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "store:workshop_info" %}">Animation Workshop</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "app:home" %}">Cantaball World Cup</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "store:about" %}">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url "store:orders" %}">My Orders</a>
               </li>
               {% if request.user.is_authenticated and request.user.role == 'ADMIN' or request.user.is_staff or request.user.is_superuser %}
               <li class="nav-item">
@@ -118,18 +130,12 @@
                 <a class="nav-link" href="{% url "store:frontdesk_event_orders" %}">Event Desk</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url "store:frontdesk_workshop_registrations" %}">Workshop Desk</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="{% url "store:frontdesk_products" %}">Products</a>
               </li>
               {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="{% url "app:home" %}">Play</a>
-              </li>
-              {% comment %} <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="book.html">Book Table</a>
-              </li> {% endcomment %}
             </ul>
             <div class="user_option">
               {% if request.user.is_authenticated %}
@@ -228,7 +234,7 @@
                        An Afro-Japanese inspired café and creative community where coffee, storytelling, music, art, and culture come together. Designed as a space for connection, creativity, and meaningful conversations, we celebrate the fusion of African and Japanese aesthetics through thoughtfully crafted coffee experiences, curated events, artistic expression, and cultural exchange. Whether you're here to work, create, perform, collaborate, or simply unwind, our café is a home for dreamers, makers, and storytellers.
                      </p>
                      <div class="btn-box">
-                       <a href="" class="btn1">
+                       <a href="#food_section" class="btn1">
                          Order Now
                        </a>
                      </div>

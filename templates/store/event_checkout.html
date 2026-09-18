@@ -28,6 +28,14 @@
               <input type="text" class="form-control" value="{{ order.event.name }}" readonly>
             </div>
             <div class="col-md-6">
+              <label>Attendee</label>
+              <input type="text" class="form-control" value="{{ order.attendee_name|default:'—' }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Attendee phone</label>
+              <input type="text" class="form-control" value="{{ order.attendee_phone|default:'—' }}" readonly>
+            </div>
+            <div class="col-md-6">
               <label>Referred by code</label>
               <input type="text" class="form-control" value="{{ order.referred_by_code|default:'—' }}" readonly>
             </div>

@@ -1,0 +1,42 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Registration Confirmed — From Sketch to Scene — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="checkout-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="checkout-card highlight-card text-center">
+          <h2 class="mb-3"><i class="fa fa-check-circle text-success"></i> Registration confirmed</h2>
+          <p>{{ registration.student_name }} is registered for <strong>From Sketch to Scene</strong>.</p>
+          <div class="row g-3 mt-3 text-start">
+            <div class="col-md-6">
+              <label>Parent/Guardian</label>
+              <input type="text" class="form-control" value="{{ registration.parent_name }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Student</label>
+              <input type="text" class="form-control" value="{{ registration.student_name }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>Price tier</label>
+              <input type="text" class="form-control" value="{{ registration.get_pricing_tier_display }} — ₦{{ registration.price|floatformat:0|intcomma }}" readonly>
+            </div>
+            <div class="col-md-6">
+              <label>School / Referral code</label>
+              <input type="text" class="form-control" value="{{ registration.school_code|default:'—' }}" readonly>
+            </div>
+            {% if registration.interested_in_fellowship %}
+            <div class="col-12">
+              <p class="text-success mb-0"><i class="fa fa-star"></i> Marked as interested in the 1-year Fellowship pathway. Our team will follow up.</p>
+            </div>
+            {% endif %}
+          </div>
+          <a href="{% url 'store:shop' %}" class="btn rounded mt-4" style="background-color: #C2410C; color: #fff;">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

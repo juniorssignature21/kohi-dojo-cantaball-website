@@ -159,13 +159,19 @@
     <div class="container position-relative">
       <div class="heading_container heading_center mb-4">
         <div class="event-ticket-ad-badge">
-          <i class="fa fa-ticket" aria-hidden="true"></i>
-          Limited event combos
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          {{ event.start_date|date:"F j, Y"|default:"Coming soon" }}
         </div>
-        <h2>{{ event.name|default:"Event Tickets" }}</h2>
+        <h2>{{ event.name|default:"Osisioma Relaunch" }}</h2>
         <p class="event-ticket-ad-sub">
-          Pick a combo ticket — food &amp; coffee included. Bring friends with your referral code and unlock free tickets.
+          {{ event.description|default:"The Kohi Dojo relaunch and creative community experience. Pick a combo pass — food & coffee included. Bring friends with your referral code and unlock free passes." }}
         </p>
+        <div class="text-center mt-3">
+          <a href="{% url 'store:event_tickets' %}" class="ticket-cta">
+            Book your Osisioma Relaunch pass
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
       </div>
 
       <div class="row g-4 justify-content-center">
@@ -221,9 +227,63 @@
   </section>
   {% endif %}
 
+  <!-- Animation Workshop teaser -->
+  <section class="event-ticket-ad">
+    <div class="container position-relative">
+      <div class="row align-items-center g-4">
+        <div class="col-md-7">
+          <div class="event-ticket-ad-badge">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+            Animation Workshop
+          </div>
+          <h2>From Sketch to Scene</h2>
+          <p class="event-ticket-ad-sub" style="text-align:left;">
+            A hands-on creative animation workshop for students — from a first sketch to a
+            finished animated scene, with a 1-year Fellowship pathway for standout talent.
+            Workshop-day price ₦50,000 · Regular price ₦60,000.
+          </p>
+          <a href="{% url 'store:workshop_register' %}" class="ticket-cta">
+            Register for the workshop
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="col-md-5 text-center">
+          <i class="fa fa-pencil" style="font-size: 96px; color:#C2410C; opacity:.85;"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cantaball World Cup teaser -->
+  <section class="event-ticket-ad">
+    <div class="container position-relative">
+      <div class="row align-items-center g-4">
+        <div class="col-md-5 text-center order-md-1 order-2">
+          <i class="fa fa-flag" style="font-size: 96px; color:#C2410C; opacity:.85;"></i>
+        </div>
+        <div class="col-md-7 order-md-2 order-1">
+          <div class="event-ticket-ad-badge">
+            <i class="fa fa-trophy" aria-hidden="true"></i>
+            Cantaball World Cup
+          </div>
+          <h2>Choose Your Country</h2>
+          <p class="event-ticket-ad-sub" style="text-align:left;">
+            Register to represent one of the 2026 World Cup-qualified countries. One representative
+            per country, ₦1,000 entry, quarterfinals and semifinals in Kohi Village, final on the
+            main stage — champion wins ₦20,000.
+          </p>
+          <a href="{% url 'app:register' %}" class="ticket-cta">
+            Represent a Country
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- food section -->
   <br><br>
-  <section class="food_section layout_padding-bottom">
+  <section class="food_section layout_padding-bottom" id="food_section">
     <div class="container">
       <div class="heading_container heading_center">
         <h2>

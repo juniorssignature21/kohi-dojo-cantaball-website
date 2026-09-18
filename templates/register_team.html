@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ page_title|default:"Register Your Team" }} - Kohi Dojo CANTABALL League{% endblock %}
+{% block title %}{{ page_title|default:"Register Your Team" }} - Kohi Dojo CANTABALL World Cup{% endblock %}
 {% block page_class %}page-register{% endblock %}
 
 {% block extra_css %}
@@ -53,6 +53,15 @@
             <label class="form-label" for="{{ teamform.motto.id_for_label }}">Team Motto</label>
             {{ teamform.motto }}
             {% for error in teamform.motto.errors %}
+              <span class="form-error visible">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="{{ teamform.country.id_for_label }}">Country You Will Represent <span class="required">*</span></label>
+            {{ teamform.country }}
+            <p class="form-hint">One representative per 2026 World Cup-qualified country. Countries already taken won't appear here.</p>
+            {% for error in teamform.country.errors %}
               <span class="form-error visible">{{ error }}</span>
             {% endfor %}
           </div>
@@ -155,8 +164,13 @@
 
         <div class="sidebar-card">
           <div class="card-label"><i class="fas fa-money-bill"></i> Entry Fee</div>
-          <div class="card-value">N3000</div>
-          <div class="card-subtext">per team</div>
+          <div class="card-value">₦1,000</div>
+          <div class="card-subtext">per representative</div>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="card-label"><i class="fas fa-flag"></i> Format</div>
+          <p>One representative per 2026 World Cup-qualified country. Qualifiers run the morning of the event; quarterfinals and semifinals happen in Kohi Village; the final is on the main stage. Champion takes home ₦20,000.</p>
         </div>
 
         <div class="sidebar-card">

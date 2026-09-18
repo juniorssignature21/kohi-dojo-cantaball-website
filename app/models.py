@@ -5,6 +5,48 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+# Countries that qualified for the 2026 FIFA World Cup — used for Cantaball
+# World Cup's "Country You Will Represent" selection.
+WORLD_CUP_2026_COUNTRIES = [
+    "Algeria", "Argentina", "Australia", "Austria", "Belgium",
+    "Bosnia and Herzegovina", "Brazil", "Cabo Verde", "Canada", "Colombia",
+    "Congo DR", "Croatia", "Curaçao", "Côte d'Ivoire", "Czechia",
+    "Ecuador", "Egypt", "England", "France", "Germany", "Ghana", "Haiti",
+    "IR Iran", "Iraq", "Japan", "Jordan", "Korea Republic", "Mexico",
+    "Morocco", "Netherlands", "New Zealand", "Norway", "Panama",
+    "Paraguay", "Portugal", "Qatar", "Saudi Arabia", "Scotland",
+    "Senegal", "South Africa", "Spain", "Sweden", "Switzerland",
+    "Tunisia", "Türkiye", "United States", "Uruguay", "Uzbekistan",
+]
+
+
+class CountrySlot(models.Model):
+    """
+    One slot per 2026 World Cup-qualified country a Cantaball World Cup
+    participant can represent. Capacity defaults to 1 (one representative
+    per country) but stays admin-editable.
+    """
+
+    name = models.CharField(max_length=100, unique=True)
+    capacity = models.PositiveIntegerField(default=1)
+    is_active = models.BooleanField(
+        default=True,
+        help_text="Uncheck to manually close this country even if capacity remains.",
+    )
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def taken_count(self):
+        return self.teams.count()
+
+    def is_available(self):
+        return self.is_active and self.taken_count() < self.capacity
+
+
 # Create your models here.
 class Season(models.Model):
     name = models.CharField(max_length=100)
@@ -65,6 +107,15 @@ class Team(models.Model):
         upload_to="logos/",
         blank=True,
         null=True
+    )
+
+    country = models.ForeignKey(
+        CountrySlot,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="teams",
+        help_text="Country this team represents in the Cantaball World Cup.",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,72 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}Frontdesk — Workshop Registrations{% endblock %}
+{% block content %}
+<section class="food_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2>From Sketch to Scene — Registrations</h2>
+    </div>
+
+    <div class="heading_container heading_center mb-3">
+      <h3>Registrations by school code</h3>
+    </div>
+    <div class="table-responsive mb-5">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>School code</th>
+            <th>School</th>
+            <th>Registrations</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in school_report %}
+          <tr>
+            <td>{{ row.school_code }}</td>
+            <td>{{ row.school_name|default:"—" }}</td>
+            <td>{{ row.count }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" class="text-center">No school-code registrations yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Parent/Guardian</th>
+            <th>Phone</th>
+            <th>Price tier</th>
+            <th>Fellowship?</th>
+            <th>School code</th>
+            <th>Payment</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for reg in registrations %}
+          <tr>
+            <td>{{ reg.student_name }}</td>
+            <td>{{ reg.parent_name }}</td>
+            <td>{{ reg.parent_phone }}</td>
+            <td>{{ reg.get_pricing_tier_display }} — ₦{{ reg.price|floatformat:0|intcomma }}</td>
+            <td>{% if reg.interested_in_fellowship %}Yes{% else %}—{% endif %}</td>
+            <td>{{ reg.school_code|default:"—" }}</td>
+            <td>{{ reg.payment_status }}</td>
+            <td>{{ reg.date|date:"M d, Y g:i A" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center">No registrations yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock content %}

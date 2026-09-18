@@ -14,7 +14,9 @@
         <thead>
           <tr>
             <th>Order</th>
+            <th>Event</th>
             <th>Customer</th>
+            <th>Attendee</th>
             <th>Ticket</th>
             <th>Total</th>
             <th>Referred by</th>
@@ -28,7 +30,9 @@
           {% for order in orders %}
           <tr>
             <td>#{{ order.order_id }}</td>
+            <td>{{ order.event.name }}</td>
             <td>{{ order.customer.email|default:"Guest" }}</td>
+            <td>{{ order.attendee_name|default:"—" }}{% if order.attendee_phone %} ({{ order.attendee_phone }}){% endif %}</td>
             <td>{{ order.ticket.name }} × {{ order.qty }}</td>
             <td>₦{{ order.total|floatformat:2|intcomma }}</td>
             <td>{{ order.referred_by_code|default:"—" }}</td>
@@ -38,7 +42,7 @@
             <td>{{ order.date|date:"M d, Y g:i A" }}</td>
           </tr>
           {% empty %}
-          <tr><td colspan="9" class="text-center">No event orders.</td></tr>
+          <tr><td colspan="11" class="text-center">No event orders.</td></tr>
           {% endfor %}
         </tbody>
       </table>

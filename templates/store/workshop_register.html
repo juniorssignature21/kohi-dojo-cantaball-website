@@ -1,0 +1,82 @@
+{% extends "./store_base.html" %}
+{% load static %}
+{% block title %}Register — From Sketch to Scene — Kohi Dojo{% endblock %}
+{% block content %}
+<section class="checkout-section py-5">
+  <div class="container">
+    <div class="heading_container heading_center mb-4">
+      <h2 style="font-size: 22px;">Register for From Sketch to Scene</h2>
+      <p class="text-muted">Fill in parent/guardian and student details below.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="checkout-card">
+          <form method="post" novalidate>
+            {% csrf_token %}
+            <h4 class="mb-3">Parent / Guardian</h4>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label">{{ form.parent_name.label }}</label>
+                {{ form.parent_name }}
+                {% for error in form.parent_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">{{ form.parent_phone.label }}</label>
+                {{ form.parent_phone }}
+                {% for error in form.parent_phone.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+              <div class="col-md-12">
+                <label class="form-label">{{ form.parent_email.label }} (optional)</label>
+                {{ form.parent_email }}
+                {% for error in form.parent_email.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+            </div>
+
+            <h4 class="mb-3">Student</h4>
+            <div class="row g-3 mb-3">
+              <div class="col-md-8">
+                <label class="form-label">{{ form.student_name.label }}</label>
+                {{ form.student_name }}
+                {% for error in form.student_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Age (optional)</label>
+                {{ form.student_age }}
+                {% for error in form.student_age.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+            </div>
+
+            <h4 class="mb-3">Pricing</h4>
+            <div class="row g-3 mb-3">
+              <div class="col-md-12">
+                <label class="form-label">Price tier — Workshop-day ₦50,000 / Regular ₦60,000</label>
+                {{ form.pricing_tier }}
+                {% for error in form.pricing_tier.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              </div>
+            </div>
+
+            <div class="form-check mb-3">
+              {{ form.interested_in_fellowship }}
+              <label class="form-check-label" for="{{ form.interested_in_fellowship.id_for_label }}">
+                {{ form.interested_in_fellowship.label }}
+              </label>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">{{ form.school_code.label }}</label>
+              {{ form.school_code }}
+              <div class="form-text">Optional — only if a partner school gave you a code.</div>
+              {% for error in form.school_code.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </div>
+
+            <button type="submit" class="btn rounded w-100" style="background-color: #C2410C; color: #fff;">
+              Complete registration
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

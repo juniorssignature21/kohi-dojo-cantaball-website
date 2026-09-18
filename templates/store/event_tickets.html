@@ -8,11 +8,14 @@
     <div class="heading_container heading_center mb-4">
       <div class="event-ticket-ad-badge">
         <i class="fa fa-ticket" aria-hidden="true"></i>
-        Event combos
+        Osisioma Relaunch passes
       </div>
-      <h2>{{ event.name|default:"Event Tickets" }}</h2>
+      <h2>{{ event.name|default:"Osisioma Relaunch" }}</h2>
       {% if event %}
       <p class="event-ticket-ad-sub">{{ event.description }}</p>
+      {% if event.start_date %}
+      <p class="event-ticket-ad-sub"><i class="fa fa-calendar" aria-hidden="true"></i> {{ event.start_date|date:"F j, Y" }}</p>
+      {% endif %}
       {% endif %}
     </div>
 
@@ -85,6 +88,14 @@
             <form method="post" action="{% url 'store:create_event_order' %}">
               {% csrf_token %}
               <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+              <div class="mb-2">
+                <label class="form-label">Attendee name</label>
+                <input type="text" name="attendee_name" class="form-control" placeholder="Full name" required value="{{ request.user.get_full_name|default:request.user.username }}">
+              </div>
+              <div class="mb-2">
+                <label class="form-label">Attendee phone</label>
+                <input type="tel" name="attendee_phone" class="form-control" placeholder="+234 800 000 0000" required>
+              </div>
               <div class="mb-2">
                 <label class="form-label">Qty</label>
                 <input type="number" name="qty" value="1" min="1" class="form-control" style="max-width:100px;">
