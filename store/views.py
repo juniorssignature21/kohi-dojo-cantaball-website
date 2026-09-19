@@ -620,6 +620,17 @@ def create_event_order(request):
         order_status="Pending",
     )
 
+    if order.total <= 0:
+        # Free passes (e.g. Explorer Pass) skip the payment gateway entirely.
+        order.payment_status = "Paid"
+        order.order_status = "Processing"
+        order.save(update_fields=["payment_status", "order_status"])
+        if ticket.stock > 0:
+            ticket.stock = max(0, ticket.stock - qty)
+            ticket.save(update_fields=["stock"])
+        evaluate_referral_rewards(order)
+        messages.success(request, f"Your free {ticket.name} is confirmed.")
+
     return redirect("store:event_checkout", order.order_id)
 
 

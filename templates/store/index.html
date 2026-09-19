@@ -162,13 +162,13 @@
           <i class="fa fa-calendar" aria-hidden="true"></i>
           {{ event.start_date|date:"F j, Y"|default:"Coming soon" }}
         </div>
-        <h2>{{ event.name|default:"Osisioma Relaunch" }}</h2>
+        <h2>{{ event.name|default:"The Next Frame 2026" }}</h2>
         <p class="event-ticket-ad-sub">
-          {{ event.description|default:"The Kohi Dojo relaunch and creative community experience. Pick a combo pass — food & coffee included. Bring friends with your referral code and unlock free passes." }}
+          {{ event.description|default:"Kohi Dojo × NueLuks Studio present The Next Frame 2026 — the Osisioma Stand Relaunch & From Sketch to Scene Animation Workshop." }}
         </p>
         <div class="text-center mt-3">
           <a href="{% url 'store:event_tickets' %}" class="ticket-cta">
-            Book your Osisioma Relaunch pass
+            Book your Next Frame pass
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
@@ -176,41 +176,31 @@
 
       <div class="row g-4 justify-content-center">
         {% for ticket in event_tickets %}
-        <div class="col-md-6 col-lg-4">
-          <article class="ticket-card{% if forloop.counter == 2 %} ticket-card--featured{% endif %}">
+        <div class="col-md-6 col-lg-3">
+          <article class="ticket-card ticket-card--banner{% if ticket.tier == 'VVIP' %} ticket-card--featured{% endif %}">
             <div class="ticket-card-media">
+              {% if not ticket.image and not ticket.image_static %}
               <span class="ticket-tier-tag">{{ ticket.tier }}</span>
-              <span class="ticket-price-pill">&#8358;{{ ticket.price|floatformat:0|intcomma }}</span>
+              <span class="ticket-price-pill">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
+              {% endif %}
               {% if ticket.image %}
-              <img src="{{ ticket.image.url }}" alt="{{ ticket.name }} combo">
+              <img src="{{ ticket.image.url }}" alt="{{ ticket.name }}">
               {% elif ticket.image_static %}
-              <img src="{% static ticket.image_static %}" alt="{{ ticket.name }} combo">
+              <img src="{% static ticket.image_static %}" alt="{{ ticket.name }}">
               {% else %}
               <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
               {% endif %}
             </div>
             <div class="ticket-card-body">
-              <h3>{{ ticket.name }}</h3>
-              <p class="ticket-combo">{{ ticket.combo_description }}</p>
-              <div class="ticket-combo-chips">
-                {% if "bun" in ticket.combo_description|lower %}
-                <span>Bun</span>
-                {% endif %}
-                {% if "sandwich" in ticket.combo_description|lower %}
-                <span>Sandwich</span>
-                {% endif %}
-                {% if "small coffee" in ticket.combo_description|lower %}
-                <span>Small coffee</span>
-                {% elif "big coffee" in ticket.combo_description|lower %}
-                <span>Big coffee</span>
-                {% elif "coffee" in ticket.combo_description|lower %}
-                <span>Coffee</span>
-                {% endif %}
+              <div class="d-flex align-items-center justify-content-between gap-2 mb-1">
+                <h3 class="mb-0" style="font-size: 1.1rem;">{{ ticket.name }}</h3>
+                <span class="ticket-price-inline">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
               </div>
+              <p class="ticket-combo">{{ ticket.combo_description }}</p>
               <div class="ticket-stub">
-                <span class="ticket-stub-meta">Admit one</span>
+                <span class="ticket-stub-meta">{{ ticket.get_tier_display }}</span>
                 <a class="ticket-cta" href="{% url 'store:event_tickets' %}">
-                  Grab ticket
+                  {% if ticket.price == 0 %}Claim{% else %}Grab pass{% endif %}
                   <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </a>
               </div>

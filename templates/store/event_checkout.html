@@ -47,15 +47,15 @@
           <h4>What You’ll Pay</h4>
           <div class="summary-row">
             <span>{{ order.ticket.name }} × {{ order.qty }}</span>
-            <strong>₦{{ order.total|floatformat:2|intcomma }}</strong>
+            <strong>{% if order.total == 0 %}FREE{% else %}₦{{ order.total|floatformat:2|intcomma }}{% endif %}</strong>
           </div>
           <p class="text-muted small mt-2">{{ order.ticket.combo_description }}</p>
           <div class="summary-row total-row">
             <span>Total Due</span>
-            <strong>₦{{ order.total|floatformat:2|intcomma }}</strong>
+            <strong>{% if order.total == 0 %}FREE{% else %}₦{{ order.total|floatformat:2|intcomma }}{% endif %}</strong>
           </div>
           {% if order.payment_status == "Paid" %}
-          <p class="mt-3 text-success">Already paid.</p>
+          <p class="mt-3 text-success">{% if order.total == 0 %}Free pass confirmed.{% else %}Already paid.{% endif %}</p>
           {% else %}
           <a href="{% url 'store:event_flutterwave_payment' order.order_id %}" class="btn rounded w-100 mt-3" style="background-color: #e8d3c4;">
             <img style="width: 250px; height: 40px; object-fit: contain;" src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Flutterwave_Logo.png" alt="Pay with Flutterwave">

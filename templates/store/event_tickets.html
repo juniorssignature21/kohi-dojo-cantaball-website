@@ -8,9 +8,9 @@
     <div class="heading_container heading_center mb-4">
       <div class="event-ticket-ad-badge">
         <i class="fa fa-ticket" aria-hidden="true"></i>
-        Osisioma Relaunch passes
+        The Next Frame 2026 passes
       </div>
-      <h2>{{ event.name|default:"Osisioma Relaunch" }}</h2>
+      <h2>{{ event.name|default:"The Next Frame 2026" }}</h2>
       {% if event %}
       <p class="event-ticket-ad-sub">{{ event.description }}</p>
       {% if event.start_date %}
@@ -54,60 +54,52 @@
     {% else %}
     <div class="row justify-content-center g-4">
       {% for ticket in tickets %}
-      <div class="col-md-6 col-lg-4">
-        <article class="ticket-card{% if forloop.counter == 2 %} ticket-card--featured{% endif %}">
-          <div class="ticket-card-media">
+      <div class="col-12">
+        <article class="ticket-card ticket-card--banner{% if ticket.tier == 'VVIP' %} ticket-card--featured{% endif %}">
+          <div class="ticket-card-media ticket-card-media--banner">
+            {% if not ticket.image and not ticket.image_static %}
             <span class="ticket-tier-tag">{{ ticket.tier }}</span>
-            <span class="ticket-price-pill">&#8358;{{ ticket.price|floatformat:0|intcomma }}</span>
+            <span class="ticket-price-pill">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
+            {% endif %}
             {% if ticket.image %}
-            <img src="{{ ticket.image.url }}" alt="{{ ticket.name }} combo">
+            <img src="{{ ticket.image.url }}" alt="{{ ticket.name }}">
             {% elif ticket.image_static %}
-            <img src="{% static ticket.image_static %}" alt="{{ ticket.name }} combo">
+            <img src="{% static ticket.image_static %}" alt="{{ ticket.name }}">
             {% else %}
             <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
             {% endif %}
           </div>
           <div class="ticket-card-body ticket-card-form">
-            <h3>{{ ticket.name }}</h3>
-            <p class="ticket-combo">{{ ticket.combo_description }}</p>
-            <div class="ticket-combo-chips">
-              {% if "bun" in ticket.combo_description|lower %}
-              <span>Bun</span>
-              {% endif %}
-              {% if "sandwich" in ticket.combo_description|lower %}
-              <span>Sandwich</span>
-              {% endif %}
-              {% if "small coffee" in ticket.combo_description|lower %}
-              <span>Small coffee</span>
-              {% elif "big coffee" in ticket.combo_description|lower %}
-              <span>Big coffee</span>
-              {% elif "coffee" in ticket.combo_description|lower %}
-              <span>Coffee</span>
-              {% endif %}
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+              <h3 class="mb-0">{{ ticket.name }}</h3>
+              <span class="ticket-price-inline">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
             </div>
+            <p class="ticket-combo">{{ ticket.combo_description }}</p>
             <form method="post" action="{% url 'store:create_event_order' %}">
               {% csrf_token %}
               <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-              <div class="mb-2">
-                <label class="form-label">Attendee name</label>
-                <input type="text" name="attendee_name" class="form-control" placeholder="Full name" required value="{{ request.user.get_full_name|default:request.user.username }}">
-              </div>
-              <div class="mb-2">
-                <label class="form-label">Attendee phone</label>
-                <input type="tel" name="attendee_phone" class="form-control" placeholder="+234 800 000 0000" required>
-              </div>
-              <div class="mb-2">
-                <label class="form-label">Qty</label>
-                <input type="number" name="qty" value="1" min="1" class="form-control" style="max-width:100px;">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Referral code (optional)</label>
-                <input type="text" name="referred_by_code" class="form-control" placeholder="Friend's code" maxlength="10" style="text-transform:uppercase;">
+              <div class="row g-2">
+                <div class="col-md-6">
+                  <label class="form-label">Attendee name</label>
+                  <input type="text" name="attendee_name" class="form-control" placeholder="Full name" required value="{{ request.user.get_full_name|default:request.user.username }}">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Attendee phone</label>
+                  <input type="tel" name="attendee_phone" class="form-control" placeholder="+234 800 000 0000" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Qty</label>
+                  <input type="number" name="qty" value="1" min="1" class="form-control">
+                </div>
+                <div class="col-md-9">
+                  <label class="form-label">Referral code (optional)</label>
+                  <input type="text" name="referred_by_code" class="form-control" placeholder="Friend's code" maxlength="10" style="text-transform:uppercase;">
+                </div>
               </div>
               <div class="ticket-stub">
-                <span class="ticket-stub-meta">Admit one</span>
+                <span class="ticket-stub-meta">{{ ticket.get_tier_display }} pass</span>
                 <button type="submit" class="ticket-cta border-0">
-                  Buy ticket
+                  {% if ticket.price == 0 %}Claim free pass{% else %}Buy pass{% endif %}
                   <i class="fa fa-arrow-right" aria-hidden="true"></i>
                 </button>
               </div>
