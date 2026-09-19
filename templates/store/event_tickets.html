@@ -52,7 +52,7 @@
     {% if not event %}
     <p class="text-center" style="color:#94a3b8;">No active event right now. Check back soon.</p>
     {% else %}
-    <div class="row justify-content-center g-4">
+    <div class="row justify-content-center g-4 gy-5">
       {% for ticket in tickets %}
       <div class="col-12">
         <article class="ticket-card ticket-card--banner{% if ticket.tier == 'VVIP' %} ticket-card--featured{% endif %}">
@@ -78,7 +78,7 @@
             <form method="post" action="{% url 'store:create_event_order' %}">
               {% csrf_token %}
               <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
-              <div class="row g-2">
+              <div class="row g-3 mb-1">
                 <div class="col-md-6">
                   <label class="form-label">Attendee name</label>
                   <input type="text" name="attendee_name" class="form-control" placeholder="Full name" required value="{{ request.user.get_full_name|default:request.user.username }}">

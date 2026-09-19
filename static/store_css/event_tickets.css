@@ -245,6 +245,24 @@
   display: none;
 }
 
+.ticket-card--banner .ticket-card-body {
+  padding: 22px 24px 26px;
+  gap: 4px;
+}
+
+.ticket-card--banner .ticket-card-body h3 {
+  margin-bottom: 0;
+}
+
+.ticket-card--banner .ticket-combo {
+  margin-bottom: 20px;
+}
+
+.ticket-card--banner .ticket-stub {
+  padding-top: 18px;
+  margin-top: 4px;
+}
+
 .ticket-price-inline {
   flex-shrink: 0;
   padding: 6px 14px;
@@ -294,11 +312,24 @@
 
 @media (max-width: 767px) {
   .event-ticket-ad {
-    padding: 48px 0 56px;
+    padding: 40px 0 48px;
   }
 
   .ticket-card-media {
     height: 180px;
+  }
+
+  .ticket-card--banner .ticket-card-body {
+    padding: 18px 18px 22px;
+  }
+
+  .ticket-card--banner .ticket-card-body h3 {
+    font-size: 1.15rem;
+  }
+
+  .ticket-price-inline {
+    font-size: 13px;
+    padding: 5px 12px;
   }
 
   .ticket-stub::before,
