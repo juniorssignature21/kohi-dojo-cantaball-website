@@ -126,6 +126,10 @@ class OrderItem(models.Model):
 TICKET_TIER = (
     ("REGULAR", "Regular"),
     ("VIP", "VIP"),
+    ("EXPLORER", "Explorer"),
+    ("COMMUNITY", "Community"),
+    ("CREATOR", "Creator"),
+    ("VVIP", "VVIP"),
 )
 
 REFERRAL_REWARD_TIER = (
