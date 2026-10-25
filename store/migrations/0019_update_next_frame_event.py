@@ -9,8 +9,8 @@ PASS_SPECS = (
     ("Explorer Pass", "EXPLORER", "0.00", "images/passes/explorer.jpg"),
     ("Community Pass", "COMMUNITY", "1000.00", "images/passes/community.jpg"),
     ("Creator Pass", "CREATOR", "2000.00", "images/passes/creator.jpg"),
-    ("Couple Pass", "COUPLE", "3000.00", "images/passes/couple.jpg"),
-    ("Family Pass", "FAMILY", "5000.00", "images/passes/family.jpg"),
+    ("Couple Pass", "COUPLE", "3000.00", "images/tickets/next-frame-couple.jpg"),
+    ("Family Pass", "FAMILY", "5000.00", "images/tickets/next-frame-family.jpg"),
     ("VVIP Pass", "VVIP", "10000.00", "images/passes/vvip.jpg"),
 )
 
