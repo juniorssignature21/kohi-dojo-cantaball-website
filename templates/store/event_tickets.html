@@ -77,10 +77,10 @@
             <span class="ticket-tier-tag">{{ ticket.tier }}</span>
             <span class="ticket-price-pill">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
             {% endif %}
-            {% if ticket.image %}
-            <img src="{{ ticket.image.url }}" alt="{{ ticket.name }}">
-            {% elif ticket.image_static %}
+            {% if ticket.image_static %}
             <img src="{% static ticket.image_static %}" alt="{{ ticket.name }}">
+            {% elif ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="{{ ticket.name }}">
             {% else %}
             <div class="ticket-art-fallback" role="img" aria-label="{{ ticket.name }} graphic"><span>THE NEXT FRAME</span><strong>{{ ticket.get_tier_display }}</strong></div>
             {% endif %}

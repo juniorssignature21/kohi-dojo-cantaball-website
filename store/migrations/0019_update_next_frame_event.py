@@ -6,12 +6,12 @@ from django.utils import timezone
 
 
 PASS_SPECS = (
-    ("Explorer Pass", "EXPLORER", "0.00"),
-    ("Community Pass", "COMMUNITY", "1000.00"),
-    ("Creator Pass", "CREATOR", "2000.00"),
-    ("Couple Pass", "COUPLE", "3000.00"),
-    ("Family Pass", "FAMILY", "5000.00"),
-    ("VVIP Pass", "VVIP", "10000.00"),
+    ("Explorer Pass", "EXPLORER", "0.00", "images/passes/explorer.jpg"),
+    ("Community Pass", "COMMUNITY", "1000.00", "images/passes/community.jpg"),
+    ("Creator Pass", "CREATOR", "2000.00", "images/passes/creator.jpg"),
+    ("Couple Pass", "COUPLE", "3000.00", "images/passes/couple.jpg"),
+    ("Family Pass", "FAMILY", "5000.00", "images/passes/family.jpg"),
+    ("VVIP Pass", "VVIP", "10000.00", "images/passes/vvip.jpg"),
 )
 
 
@@ -35,7 +35,7 @@ def update_next_frame(apps, schema_editor):
     event.save(update_fields=["name", "description", "start_date"])
 
     neutral_description = "Pass inclusions are being finalised by the organisers."
-    for name, tier, price in PASS_SPECS:
+    for name, tier, price, image_static in PASS_SPECS:
         EventTicket.objects.update_or_create(
             event=event,
             name=name,
@@ -43,6 +43,7 @@ def update_next_frame(apps, schema_editor):
                 "tier": tier,
                 "price": Decimal(price),
                 "combo_description": neutral_description,
+                "image_static": image_static,
                 "is_purchasable": True,
             },
         )
