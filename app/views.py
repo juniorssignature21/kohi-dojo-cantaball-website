@@ -5,6 +5,7 @@ from decimal import Decimal
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponsePermanentRedirect
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
@@ -56,51 +57,21 @@ def home(request):
 
     return render(request, "home.html", context)
 
+
+def ink_motion(request):
+    return render(request, "ink_motion.html")
+
+
+def ink_motion_legacy(request):
+    return HttpResponsePermanentRedirect('/ink-and-motion/')
+
 @login_required(login_url='login')
 def register_team(request):
-    existing_team = Team.objects.filter(user=request.user).first()
-    if existing_team:
-        return redirect('app:team', foo=existing_team.team_name)
-
-    teamform = TeamForm()
-    captainform = TeamPlayerForm(prefix='captain', role_label='captain')
-    playerform = TeamPlayerForm(prefix='player', role_label='player')
-
-    if request.method == "POST":
-        teamform = TeamForm(request.POST, request.FILES)
-        captainform = TeamPlayerForm(request.POST, prefix='captain', role_label='captain')
-        playerform = TeamPlayerForm(request.POST, prefix='player', role_label='player')
-
-        if teamform.is_valid() and captainform.is_valid() and playerform.is_valid():
-            with transaction.atomic():
-                team = teamform.save(commit=False)
-                team.user = request.user
-                team.save()
-
-                captain = captainform.save(commit=False)
-                captain.team = team
-                captain.is_captain = True
-                captain.save()
-
-                player = playerform.save(commit=False)
-                player.team = team
-                player.is_captain = False
-                player.save()
-
-            messages.success(request, "Team registered successfully.")
-            return redirect('app:team', foo=team.team_name)
-
-    context = {
-        "teamform": teamform,
-        "captainform": captainform,
-        "playerform": playerform,
-        "form_action": "app:register",
-        "page_title": "Register Your Team",
-        "page_subtitle": "Create your team profile and add both players.",
-        "form_title": "Team Registration",
-        "submit_label": "Complete Registration",
-    }
-    return render(request, "register_team.html", context)
+    messages.info(
+        request,
+        "Cantaball World Cup registration is not open yet. The tournament is planned for Games Weekend, 20–22 November 2026; details will be announced later.",
+    )
+    return redirect('app:home')
 
 
 @login_required(login_url='login')

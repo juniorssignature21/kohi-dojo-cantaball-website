@@ -5,6 +5,8 @@ app_name = 'app'
 
 urlpatterns = [
     path('play/', views.home, name='home'),
+    path('ink-and-motion/', views.ink_motion, name='ink_motion'),
+    path('ink&motion/', views.ink_motion_legacy, name='ink_motion_legacy'),
     path('register/', views.register_team, name='register'),
     path('team/edit/', views.edit_team, name='edit_team'),
     path('team/<str:foo>/', views.team_details, name="team"),

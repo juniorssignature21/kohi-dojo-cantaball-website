@@ -1,266 +1,77 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Kohi Dojo CANTABALL World Cup - Home{% endblock %}
+{% block title %}Cantaball at The Next Frame — Kohi Dojo{% endblock %}
 {% block page_class %}page-home{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
 
 {% block content %}
-
-<!-- ===== HERO SECTION ===== -->
-<section class="hero">
-  <canvas id="particle-canvas" class="hero-canvas"></canvas>
-  <div class="hero-bg" style="background-image: url('{% static 'images/banner.png' %}')"></div>
-  <div class="hero-overlay"></div>
-
-  <div class="hero-content">
-    <div class="hero-badge fade-in">
-      <i class="fas fa-flag"></i>
-      Cantaball World Cup
+<section class="kd-event-hero">
+  <div class="kd-hero-image" role="img" aria-label="Cantaball players gather around a tabletop pitch"></div>
+  <div class="kd-hero-grain"></div>
+  <div class="container kd-hero-inner">
+    <p class="kd-kicker"><span></span> Kohi Dojo × NueLuks Studio</p>
+    <h1>Play the game.<br><em>Meet the makers.</em></h1>
+    <p class="kd-hero-copy">Aba’s tabletop football tradition meets animation, art and community at The Next Frame.</p>
+    <div class="kd-hero-actions">
+      <a href="{% url 'store:event_tickets' %}" class="kd-button">Find your pass <span>↗</span></a>
+      <a href="#cantaball" class="kd-text-link">Discover Cantaball <span>↓</span></a>
     </div>
-    <h1 class="hero-title fade-in stagger-1">KOHI DOJO<br>CANTABALL WORLD CUP</h1>
-    <p class="hero-subtitle fade-in stagger-2">Abia's Premier Indoor Sports Tournament. Choose your country. Compete for the title.</p>
-    <div class="hero-actions fade-in stagger-3">
-      <a href="{% url 'app:register' %}" class="btn btn-primary btn-lg">
-        <i class="fas fa-flag"></i> Represent a Country
-      </a>
-      <a href="{% url 'app:fixtures' %}" class="btn btn-outline btn-lg">
-        <i class="fas fa-calendar-days"></i> View Fixtures
-      </a>
-    </div>
+    <div class="kd-event-stamp" aria-label="Saturday 31 October at El Dorado, Aba"><span>SATURDAY</span><strong>31</strong><span>OCTOBER · ABA</span></div>
   </div>
-
-  <div class="hero-scroll">
-    <i class="fas fa-chevron-down"></i>
-  </div>
+  <div class="kd-hero-edge">THE NEXT FRAME — 2026</div>
 </section>
 
-<!-- ===== STATISTICS BAR ===== -->
-<section class="stats-bar">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-card glass-card fade-in">
-        <div class="stat-icon"><i class="fas fa-users"></i></div>
-        <div class="stat-number" data-count="{{registered_count}}" data-prefix="">0</div>
-        <div class="stat-label">Teams Registered</div>
-      </div>
-      <div class="stat-card glass-card fade-in stagger-1">
-        <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-        <div class="stat-number" data-count="{{ matches }}" data-prefix="">0</div>
-        <div class="stat-label">Matches Played</div>
-      </div>
-      <div class="stat-card glass-card fade-in stagger-2">
-        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-        <div class="stat-number" data-count="{{ completed_weeks.count }}" data-prefix="">0</div>
-        <div class="stat-label">Weeks Completed</div>
-      </div>
-      <div class="stat-card glass-card fade-in stagger-3">
-        <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
-        <div class="stat-number" data-count="200" data-prefix="N" data-suffix="K">0</div>
-        <div class="stat-label">Prize Pool</div>
-      </div>
+<section class="kd-event-strip" aria-label="Event details">
+  <div><span>01 / WHEN</span><strong>Saturday, 31 October 2026</strong></div>
+  <div><span>02 / WHERE</span><strong>El Dorado, Aba</strong></div>
+  <div><span>03 / WHAT’S ON</span><strong>Art · Animation · Cantaball</strong></div>
+</section>
+
+<section class="kd-story" id="cantaball">
+  <div class="container kd-story-grid">
+    <div class="kd-story-index"><span>01</span><i></i> THE GAME</div>
+    <div class="kd-story-copy">
+      <p class="kd-kicker">From the streets of Aba to the studio floor</p>
+      <h2>Small pitch.<br><em>Big energy.</em></h2>
+      <p>Cantaball is tabletop football with deep roots in Aba. At The Next Frame, registered pass holders can request a place in a short, one-off mini-tournament. Entry is free; places depend on available slots.</p>
+      <a href="{% url 'store:event_tickets' %}" class="kd-arrow-link">Explore event passes <span>↗</span></a>
+    </div>
+    <div class="kd-story-art">
+      <img src="{% static 'images/banner1.jpg' %}" alt="A look inside the Kohi Dojo community space">
+      <div class="kd-art-caption">Kohi Dojo / Aba<br>Community in motion</div>
     </div>
   </div>
 </section>
 
-<!-- ===== ABOUT SECTION ===== -->
-<section class="about-section">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-content slide-left">
-        <span class="section-label">About the Tournament</span>
-        <h4 class="section-title">What is the Kohi Dojo Cantaball World Cup?</h4>
-        <p><strong>Cantaball World Cup</strong> is the tournament edition of the Kohi Dojo Cantaball League, hosted by Kohi Dojo × NueLuks Studio as the centrepiece of The Next Frame. Instead of playing for a club, every participant registers to represent one of the countries that qualified for the 2026 FIFA World Cup — one representative per country. Entry is ₦1,000. Qualifiers run the morning of the event, quarterfinals and semifinals take place in Kohi Village, and the final is played on the main stage. The champion takes home ₦20,000.</p>
-        <p>The Kohi Dojo Cantaball League is a weekly indoor tabletop football competition hosted at the LearnFactory TechRise Campus by Kohi Dojo × NueLuks Studio. Inspired by the iconic street game played across Aba with bottle corks and paper goalposts, the league reimagines Cantaball into a professionally organized tournament that celebrates competition, creativity and community.</p>
-        <p>Every week, 20 teams of two players battle through a round-robin league, with the top teams earning qualification for the Champions League Finals, which will be held during The Next Frame. Beyond the competition, the league serves as a community hub where students connect, enjoy great food from Kohi Dojo, and create unforgettable moments together.</p>
-        <p style="font-style: italic; color: var(--muted); margin-top: 16px;">Whether you're playing for the trophy, the prize money or simply for the love of the game, the Kohi Dojo Cantaball World Cup is where Aba's tradition meets a new generation of innovation.</p>
-        <ul class="feature-list">
-          <li><i class="fas fa-flag"></i> One Representative Per 2026 World Cup-Qualified Country</li>
-          <li><i class="fas fa-money-bill"></i> ₦1,000 Entry Per Representative</li>
-          <li><i class="fas fa-futbol"></i> Qualifiers Run The Morning Of The Event</li>
-          <li><i class="fas fa-users"></i> Quarterfinals & Semifinals In Kohi Village</li>
-          <li><i class="fas fa-star"></i> Final Played On The Main Stage</li>
-          <li><i class="fas fa-trophy"></i> Champion Wins ₦20,000</li>
-          <li><i class="fas fa-camera"></i> Team Features Across Social Media</li>
-          <li><i class="fas fa-microphone"></i> Live Commentary & Match Coverage</li>
-          <li><i class="fas fa-coffee"></i> Food, Coffee & Community at Kohi Dojo</li>
-          <li><i class="fas fa-crown"></i> Grand Championship During The Next Frame</li>
-        </ul>
-      </div>
-      <div class="about-image-wrap slide-right">
-        <div class="about-image">
-          <img src="{% static 'images/banner1.jpg' %}" alt="Kohi Dojo indoor sports facility in Lagos">
-        </div>
-        {% comment %} <div class="about-float-card">
-          <i class="fas fa-trophy"></i>
-          <span>5 Years of Excellence</span>
-        </div> {% endcomment %}
-      </div>
+<section class="kd-world-cup">
+  <div class="container kd-world-grid">
+    <div>
+      <p class="kd-kicker">A bigger match is on the horizon</p>
+      <h2>Cantaball<br><em>World Cup</em></h2>
+    </div>
+    <div class="kd-world-info">
+      <span class="kd-coming">COMING SOON <b>●</b></span>
+      <p>Games Weekend<br><strong>20–22 November 2026</strong></p>
+      <small>Tournament format and entry details will be announced later.</small>
     </div>
   </div>
 </section>
 
-<!-- ===== WEEKLY REGISTRATION CARD ===== -->
-<section class="reg-section">
-  <div class="container">
-    <div class="text-center fade-in">
-      <span class="section-label">Weekly Registration</span>
-      <h2 class="section-title">Register for This Week</h2>
-    </div>
-
-    <div class="reg-card fade-in stagger-1" style="margin-top: 40px;">
-      <div class="reg-card-grid">
-        {% if active_week %}
-          <div class="reg-info">
-            <div class="week-badge">
-              <i class="fas fa-calendar"></i>
-              Week {{ active_week.week_number }} — {{ active_week.registration_close|date:"F j, Y" }}
-            </div>
-
-            <div class="reg-progress">
-              <div class="reg-progress-header">
-                <span>Registration Progress</span>
-                <span>{{ registered_count }} of {{ active_week.max_teams }} Teams</span>
-              </div>
-              <div class="progress-bar" data-progress="{{ registration_progress }}">
-                <div class="progress-fill" style="width: 0%"></div>
-              </div>
-            </div>
-
-            <div data-countdown="{{ active_week.registration_close|date:'c' }}">
-              <p style="font-size: 14px; color: var(--muted); margin-bottom: 12px;">Registration Closes In</p>
-              <div class="countdown">
-                <div class="countdown-box">
-                  <span class="countdown-number" data-countdown-days>00</span>
-                  <span class="countdown-label">Days</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="countdown-number" data-countdown-hours>00</span>
-                  <span class="countdown-label">Hours</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="countdown-number" data-countdown-minutes>00</span>
-                  <span class="countdown-label">Mins</span>
-                </div>
-                <div class="countdown-box">
-                  <span class="countdown-number" data-countdown-seconds>00</span>
-                  <span class="countdown-label">Secs</span>
-                </div>
-              </div>
-              <div data-countdown-expired style="display: none; padding: 16px; background: var(--glass-hover); border-radius: var(--radius-sm); margin-top: 16px;">
-                <p style="color: var(--red); font-weight: 600;"><i class="fas fa-clock"></i> Registration Closed</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="reg-sidebar">
-            <div class="fee-card glass-card">
-              <h4>Entry Fee</h4>
-              <div class="fee-amount">{{ entry_fee_display }}</div>
-              <p class="fee-subtext">per team of 2 players</p>
-            </div>
-
-            <div class="slots-card glass-card">
-              <h4>Slots Remaining</h4>
-              <div class="slots-number">{{ remaining_slots }}</div>
-              <p class="slots-text">out of {{ active_week.max_teams }} total spots</p>
-              <p class="slots-urgency"><i class="fas fa-fire"></i> Register now before spots fill up!</p>
-            </div>
-
-            <a href="{% url 'app:league_register' %}" class="btn btn-primary btn-lg btn-full">
-              <i class="fas fa-users"></i> Register Your Team
-            </a>
-          </div>
-        {% else %}
-          <div class="reg-info">
-            <div class="week-badge">
-              <i class="fas fa-calendar"></i>
-              No Active Registration
-            </div>
-            <p style="margin-top: 16px; color: var(--muted);">A new weekly registration window will open soon. Please check back later.</p>
-          </div>
-        {% endif %}
-      </div>
+<section class="kd-studio">
+  <div class="container kd-studio-grid">
+    <div class="kd-studio-number">02<br><span>THE STUDIO</span></div>
+    <div>
+      <p class="kd-kicker">Ink&Motion / animation & story</p>
+      <h2>Stories take shape<br><em>one frame at a time.</em></h2>
+      <p>Ink&Motion is the animation and storytelling arm of the Kohi Dojo creative community. The studio is developing <strong>Aba Chronicles</strong>, with a first five-minute preview planned for 1 January 2027.</p>
+      <div class="kd-project-list"><span>IN DEVELOPMENT <b>Aba Chronicles</b></span><span>PROJECTS <b>Loja · The Elementals · Sounds of Music · Inktober</b></span></div>
+      <a href="mailto:nueluks.studio@gmail.com?subject=Ink%26Motion%20partnership%20enquiry" class="kd-arrow-link">Partner with the studio <span>↗</span></a>
     </div>
   </div>
 </section>
 
-<!-- ===== SPONSORS SECTION ===== -->
-{% comment %} <section class="sponsors-section">
-  <div class="container">
-    <p class="sponsors-title">Our Partners</p>
-    <div class="sponsors-row fade-in">
-      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="28" fill="white" font-family="Poppins" font-weight="700" font-size="18">SPORTSGEAR</text>
-        <text x="110" y="28" fill="#EA580C" font-family="Poppins" font-weight="700" font-size="18">PRO</text>
-      </svg>
-      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <text x="0" y="20" fill="white" font-family="Poppins" font-weight="600" font-size="14">LAGOS FITNESS</text>
-        <text x="0" y="36" fill="#94A3B8" font-family="Poppins" font-weight="400" font-size="12">CLUB</text>
-      </svg>
-      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 8L22 16H30L23.5 21L26 29L20 24L14 29L16.5 21L10 16H18L20 8Z" fill="white" transform="scale(0.8) translate(5,5)"/>
-        <text x="35" y="28" fill="white" font-family="Poppins" font-weight="700" font-size="20" font-style="italic">NIKE</text>
-      </svg>
-      <svg class="sponsor-logo" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 30L25 10L30 18L45 8L40 30H10Z" fill="white" opacity="0.8"/>
-        <text x="55" y="28" fill="white" font-family="Poppins" font-weight="400" font-size="16" font-style="italic">adidas</text>
-      </svg>
-    </div>
-  </div>
-</section> {% endcomment %}
-
-<!-- ===== GALLERY PREVIEW ===== -->
-<!--<section class="gallery-preview">
-  <div class="container">
-    <div class="fade-in">
-      <span class="section-label">Gallery</span>
-      <h2 class="section-title">Moments from the League</h2>
-    </div>
-
-    <div class="gallery-grid-preview">
-      <div class="gallery-item" data-lightbox="{% static 'images/gallery-1.jpg' %}" data-caption="Action shot">
-        <img src="{% static 'images/gallery-1.jpg' %}" alt="Gallery image 1">
-        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
-      </div>
-      <div class="gallery-item" data-lightbox="{% static 'images/gallery-2.jpg' %}" data-caption="Team celebration">
-        <img src="{% static 'images/gallery-2.jpg' %}" alt="Gallery image 2">
-        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
-      </div>
-      <div class="gallery-item" data-lightbox="{% static 'images/gallery-3.jpg' %}" data-caption="Tournament hall">
-        <img src="{% static 'images/gallery-3.jpg' %}" alt="Gallery image 3">
-        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
-      </div>
-      <div class="gallery-item" data-lightbox="{% static 'images/gallery-4.jpg' %}" data-caption="Player serving">
-        <img src="{% static 'images/gallery-4.jpg' %}" alt="Gallery image 4">
-        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
-      </div>
-    </div>
-
-    <div class="gallery-preview-btn fade-in">
-      {% comment %} <a href="{% url 'gallery' %}" class="btn btn-secondary btn-md"> {% endcomment %}
-        <i class="fas fa-images"></i> View Full Gallery
-      </a>
-    </div>
-  </div>
-</section>-->
-
-<!-- ===== CTA BANNER ===== -->
-<section class="cta-banner home-cta">
-  <div class="container">
-    <h2 class="fade-in">Ready to Compete?</h2>
-    <p class="fade-in stagger-1">Register your team today and join Lagos' most exciting weekly sports league. Only 2 spots remaining for this week!</p>
-    <a href="{% url 'app:register' %}" class="btn btn-lg fade-in stagger-2">
-      <i class="fas fa-rocket"></i> Register Now
-    </a>
-  </div>
+<section class="kd-close">
+  <div class="container kd-close-row"><div><p class="kd-kicker">31 October · El Dorado, Aba</p><h2>Make a day of it.</h2></div><a href="{% url 'store:event_tickets' %}" class="kd-button">Choose a pass <span>↗</span></a></div>
 </section>
-
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'js/registration.js' %}"></script>
 {% endblock %}

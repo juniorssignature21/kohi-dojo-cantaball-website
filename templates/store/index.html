@@ -1,6 +1,26 @@
 {% extends "./store_base.html" %}
 {% load static %}
 {% load humanize %}
+{% block title %}Kohi Dojo — Coffee, culture & community in Aba{% endblock %}
+{% block extra_css %}<style>
+.home-event { margin:58px auto 70px; max-width:1280px; padding:0 24px; }
+.home-event-panel { position:relative; overflow:hidden; min-height:420px; display:flex; align-items:center; color:#f8f1e5; background:#18251f; }
+.home-event-panel:before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(14,24,19,.94),rgba(14,24,19,.76) 48%,rgba(14,24,19,.1)),url('{% static 'images/banner.png' %}') center/cover; }
+.home-event-copy { position:relative; max-width:700px; padding:clamp(32px,7vw,76px); }
+.home-event-kicker { color:#ff9a6e; font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
+.home-event h2 { margin:18px 0; color:#fff5e8; font:clamp(44px,7vw,82px)/.98 Georgia,serif; }
+.home-event h2 em { color:#f2774b; font-weight:400; }
+.home-event-summary { max-width:430px; color:#e2ded4; font-size:15px; line-height:1.75; }
+.home-event-meta { display:flex; flex-wrap:wrap; gap:12px 28px; margin:26px 0; color:#fff4e6; font-size:12px; }
+.home-event-meta b { color:#ff9a6e; margin-right:7px; }
+.home-event-cta { display:inline-flex; gap:30px; align-items:center; padding:14px 18px; background:#e65a2c; color:#fff; font-size:12px; font-weight:700; }
+.home-event-note { margin-top:14px; color:#c5c5bb; font-size:10px; }
+.ticket-art-fallback { min-height:180px; height:100%; display:flex; flex-direction:column; justify-content:space-between; padding:20px; color:#f8efe1; background:radial-gradient(circle at 90% 15%,rgba(239,125,77,.65),transparent 35%),linear-gradient(145deg,#20372c,#111d17); }
+.ticket-art-fallback span { font-size:9px; letter-spacing:.18em; }
+.ticket-art-fallback strong { font:30px Georgia,serif; }
+.home-frame-label { position:absolute; right:19px; top:22px; color:rgba(255,255,255,.65); writing-mode:vertical-rl; font-size:9px; letter-spacing:.2em; }
+@media(max-width:575px) { .home-event { margin:25px auto 45px; padding:0 14px; } .home-event-panel { min-height:500px; align-items:flex-end; } .home-event-panel:before { background:linear-gradient(0deg,rgba(14,24,19,.98),rgba(14,24,19,.55) 70%,rgba(14,24,19,.1)),url('{% static 'images/banner.png' %}') 57% center/cover; } .home-event-copy { padding:28px 22px; } .home-event-meta { flex-direction:column; gap:8px; } .home-frame-label { display:none; } }
+</style>{% endblock %}
 {% block content %}
 
   {% comment %} <!-- offer section -->
@@ -154,17 +174,31 @@
 
   <!-- end offer section --> {% endcomment %}
 
+  <section class="home-event" aria-labelledby="next-frame-title">
+    <div class="home-event-panel">
+      <div class="home-event-copy">
+        <div class="home-event-kicker">Kohi Dojo × NueLuks Studio present</div>
+        <h2 id="next-frame-title">The Next<br><em>Frame.</em></h2>
+        <p class="home-event-summary">A gathering for art, animation and play. Join us in Aba for a day shaped by local stories and the people who make them.</p>
+        <div class="home-event-meta"><span><b>WHEN</b> Saturday, 31 October 2026</span><span><b>WHERE</b> El Dorado, Aba</span></div>
+        <a href="{% url 'store:event_tickets' %}" class="home-event-cta">Explore passes <span>↗</span></a>
+        <p class="home-event-note">Cantaball mini-tournament slots are free for registered pass holders, subject to availability.</p>
+      </div>
+      <span class="home-frame-label">THE NEXT FRAME / 2026</span>
+    </div>
+  </section>
+
   {% if event_tickets %}
   <section class="event-ticket-ad">
     <div class="container position-relative">
       <div class="heading_container heading_center mb-4">
         <div class="event-ticket-ad-badge">
           <i class="fa fa-calendar" aria-hidden="true"></i>
-          {{ event.start_date|date:"F j, Y"|default:"Coming soon" }}
+          Saturday · 31 October 2026
         </div>
-        <h2>{{ event.name|default:"The Next Frame 2026" }}</h2>
+        <h2>Choose your way in</h2>
         <p class="event-ticket-ad-sub">
-          {{ event.description|default:"Kohi Dojo × NueLuks Studio present The Next Frame 2026 — the Osisioma Stand Relaunch & From Sketch to Scene Animation Workshop." }}
+          Pass names and prices are listed below. Specific inclusions are being finalised; please check back for confirmed details.
         </p>
         <div class="text-center mt-3">
           <a href="{% url 'store:event_tickets' %}" class="ticket-cta">
@@ -176,7 +210,7 @@
 
       <div class="row g-4 justify-content-center">
         {% for ticket in event_tickets %}
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-6 col-lg-4">
           <article class="ticket-card ticket-card--banner{% if ticket.tier == 'VVIP' %} ticket-card--featured{% endif %}">
             <div class="ticket-card-media">
               {% if not ticket.image and not ticket.image_static %}
@@ -188,7 +222,7 @@
               {% elif ticket.image_static %}
               <img src="{% static ticket.image_static %}" alt="{{ ticket.name }}">
               {% else %}
-              <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
+              <div class="ticket-art-fallback" role="img" aria-label="{{ ticket.name }} graphic"><span>THE NEXT FRAME</span><strong>{{ ticket.get_tier_display }}</strong></div>
               {% endif %}
             </div>
             <div class="ticket-card-body">
@@ -196,7 +230,7 @@
                 <h3 class="mb-0" style="font-size: 1.1rem;">{{ ticket.name }}</h3>
                 <span class="ticket-price-inline">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
               </div>
-              <p class="ticket-combo">{{ ticket.combo_description }}</p>
+          <p class="ticket-combo">The pass price is confirmed. Event inclusions will be announced when finalised.</p>
               <div class="ticket-stub">
                 <span class="ticket-stub-meta">{{ ticket.get_tier_display }}</span>
                 <a class="ticket-cta" href="{% url 'store:event_tickets' %}">
@@ -258,12 +292,10 @@
           </div>
           <h2>Choose Your Country</h2>
           <p class="event-ticket-ad-sub" style="text-align:left;">
-            Register to represent one of the 2026 World Cup-qualified countries. One representative
-            per country, ₦1,000 entry, quarterfinals and semifinals in Kohi Village, final on the
-            main stage — champion wins ₦20,000.
+            The Cantaball World Cup is planned for Games Weekend, 20–22 November 2026. Tournament format, entry requirements and prizes are still to be announced.
           </p>
-          <a href="{% url 'app:register' %}" class="ticket-cta">
-            Represent a Country
+          <a href="{% url 'app:home' %}" class="ticket-cta">
+            See Cantaball update
             <i class="fa fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>

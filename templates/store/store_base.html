@@ -37,6 +37,9 @@
   <!-- responsive style -->
   <link href="{% static 'store_css/responsive.css' %}" rel="stylesheet" />
   <style>
+    .navbar-toggler { border: 1px solid rgba(30,41,59,.3); padding: 7px 10px; }
+    .navbar-menu-label { color:#1f2933; font-size:27px; line-height:1; }
+    .navbar-toggler:focus { outline:2px solid #c2410c; outline-offset:2px; }
     .top-scroll{
       width: 50px;
       height: 50px;
@@ -94,9 +97,7 @@
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             {% comment %} <span class="navbar-toggler-icon"></span> {% endcomment %}
-            <span>
-              {% comment %} <i class="bi bi-list"></i> {% endcomment %}
-            </span>
+            <span class="navbar-menu-label" aria-hidden="true"><i class="bi bi-list"></i></span>
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -111,10 +112,11 @@
                 <a class="nav-link" href="{% url "store:event_tickets" %}">The Next Frame</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url "app:ink_motion" %}">Ink&Motion</a>
                 <a class="nav-link" href="{% url "store:workshop_info" %}">Animation Workshop</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url "app:home" %}">Cantaball World Cup</a>
+                <a class="nav-link" href="{% url "app:home" %}">Cantaball</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url "store:about" %}">About</a>

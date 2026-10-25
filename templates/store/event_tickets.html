@@ -1,22 +1,38 @@
 {% extends "./store_base.html" %}
 {% load static %}
 {% load humanize %}
-{% block title %}Event Tickets — Kohi Dojo{% endblock %}
+{% block title %}The Next Frame passes · 31 October 2026 — Kohi Dojo{% endblock %}
+{% block extra_css %}<style>
+.event-ticket-ad { padding:70px 0 90px; background:linear-gradient(180deg,#17251f,#101b17); }
+.event-ticket-ad .heading_container { max-width:760px; margin:0 auto 42px; }
+.event-ticket-ad .heading_container h2 { color:#fff4e4; font:clamp(42px,7vw,72px)/1 Georgia,serif; letter-spacing:-.04em; }
+.event-ticket-ad .event-ticket-ad-badge { display:inline-flex; gap:10px; align-items:center; padding:8px 12px; border:1px solid rgba(236,135,91,.48); color:#f1a17d; font-size:10px; font-weight:700; letter-spacing:.14em; }
+.event-ticket-ad .event-ticket-ad-sub { color:#cbd2cb; }
+.event-confirmed { display:flex; justify-content:center; flex-wrap:wrap; gap:12px 30px; margin:24px 0 10px; color:#f3eadc; font-size:13px; }
+.event-confirmed strong { color:#ef8a5d; }
+.event-pass-note { max-width:700px; margin:0 auto 34px; padding:15px 18px; border-left:2px solid #e46a3e; background:rgba(255,255,255,.055); color:#cbd2cb; text-align:left; font-size:12px; }
+.ticket-card-body { color:#17211d; }
+.ticket-card .ticket-combo { font-size:12px; color:#5e6962; }
+.ticket-card .form-label { color:#27362e; font-size:12px; font-weight:600; }
+.ticket-card .form-control { min-height:46px; border-color:#d8d9d1; }
+.ticket-card .ticket-stub-meta { text-transform:uppercase; letter-spacing:.09em; }
+.ticket-art-fallback { min-height:180px; height:100%; display:flex; flex-direction:column; justify-content:space-between; padding:20px; color:#f8efe1; background:radial-gradient(circle at 90% 15%,rgba(239,125,77,.65),transparent 35%),linear-gradient(145deg,#20372c,#111d17); }
+.ticket-art-fallback span { font-size:9px; letter-spacing:.18em; }
+.ticket-art-fallback strong { font:36px Georgia,serif; }
+@media(max-width:600px){.event-ticket-ad{padding:45px 0 60px}.event-confirmed{align-items:flex-start;flex-direction:column;gap:8px}}
+</style>{% endblock %}
 {% block content %}
 <section class="event-ticket-ad">
   <div class="container position-relative">
     <div class="heading_container heading_center mb-4">
       <div class="event-ticket-ad-badge">
         <i class="fa fa-ticket" aria-hidden="true"></i>
-        The Next Frame 2026 passes
+        THE NEXT FRAME · ABA
       </div>
-      <h2>{{ event.name|default:"The Next Frame 2026" }}</h2>
-      {% if event %}
-      <p class="event-ticket-ad-sub">{{ event.description }}</p>
-      {% if event.start_date %}
-      <p class="event-ticket-ad-sub"><i class="fa fa-calendar" aria-hidden="true"></i> {{ event.start_date|date:"F j, Y" }}</p>
-      {% endif %}
-      {% endif %}
+      <h2>Find your way in.</h2>
+      <p class="event-ticket-ad-sub">A day for animation, art and play, brought together by Kohi Dojo × NueLuks Studio.</p>
+      <div class="event-confirmed"><span><strong>WHEN</strong> Saturday, 31 October 2026</span><span><strong>WHERE</strong> El Dorado, Aba</span></div>
+      <p class="event-pass-note">Pass names and prices are confirmed. Pass inclusions are still being finalised. Registered pass holders may request a free place in a Cantaball mini-tournament; places depend on capacity.</p>
     </div>
 
     {% if referral_stats %}
@@ -66,7 +82,7 @@
             {% elif ticket.image_static %}
             <img src="{% static ticket.image_static %}" alt="{{ ticket.name }}">
             {% else %}
-            <img src="{% static 'images/parfait.png' %}" alt="{{ ticket.name }}">
+            <div class="ticket-art-fallback" role="img" aria-label="{{ ticket.name }} graphic"><span>THE NEXT FRAME</span><strong>{{ ticket.get_tier_display }}</strong></div>
             {% endif %}
           </div>
           <div class="ticket-card-body ticket-card-form">
@@ -74,7 +90,7 @@
               <h3 class="mb-0">{{ ticket.name }}</h3>
               <span class="ticket-price-inline">{% if ticket.price == 0 %}FREE{% else %}&#8358;{{ ticket.price|floatformat:0|intcomma }}{% endif %}</span>
             </div>
-            <p class="ticket-combo">{{ ticket.combo_description }}</p>
+            <p class="ticket-combo">Pass inclusions will be shared once confirmed by the organisers.</p>
             <form method="post" action="{% url 'store:create_event_order' %}">
               {% csrf_token %}
               <input type="hidden" name="ticket_id" value="{{ ticket.id }}">

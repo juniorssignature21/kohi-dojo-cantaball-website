@@ -129,6 +129,8 @@ TICKET_TIER = (
     ("EXPLORER", "Explorer"),
     ("COMMUNITY", "Community"),
     ("CREATOR", "Creator"),
+    ("COUPLE", "Couple"),
+    ("FAMILY", "Family"),
     ("VVIP", "VVIP"),
 )
 

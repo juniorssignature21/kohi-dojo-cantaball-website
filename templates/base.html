@@ -4,23 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kohi Dojo CANTABALL World Cup - Abia's Premier Indoor Sports Tournament. One representative per country, one champion.">
+  <meta name="description" content="Kohi Dojo brings Aba’s Cantaball, animation and community together at The Next Frame, 31 October 2026 at El Dorado, Aba.">
   <meta name="keywords" content="CANTABALL, CANTABALL World Cup, sports tournament, Abia, indoor sports, The Next Frame">
   <meta name="author" content="Kohi Dojo">
   <meta name="theme-color" content="#0F172A">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="{% block og_title %}Kohi Dojo CANTABALL World Cup{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}Abia's Premier Indoor Sports Tournament — choose your country{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Kohi Dojo — The Next Frame, Aba{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Art, animation and Cantaball at El Dorado, Aba · Saturday 31 October 2026.{% endblock %}">
   {% comment %} <meta property="og:image" content="{% static 'icons/og-image.jpg' %}"> {% endcomment %}
   <meta property="og:type" content="website">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{% block twitter_title %}Kohi Dojo CANTABALL World Cup{% endblock %}">
-  <meta name="twitter:description" content="{% block twitter_description %}Abia's Premier Indoor Sports Tournament — choose your country{% endblock %}">
+  <meta name="twitter:title" content="{% block twitter_title %}Kohi Dojo — The Next Frame, Aba{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Art, animation and Cantaball at El Dorado, Aba · Saturday 31 October 2026.{% endblock %}">
 
-  <title>{% block title %}Kohi Dojo CANTABALL World Cup{% endblock %}</title>
+  <title>{% block title %}Kohi Dojo — The Next Frame, Aba{% endblock %}</title>
 
   <!-- Favicon -->
   {% comment %} <link rel="icon" type="image/png" href="{% static 'icons/favicon.png' %}"> {% endcomment %}
@@ -168,11 +168,12 @@
       </a>
 
       <nav class="header-nav">
-        <a href="{% url 'store:shop' %}">Home</a>
+        <a href="{% url 'store:shop' %}">Kohi Dojo</a>
         <a href="{% url 'store:shop' %}#food_section">Order From Kohi</a>
         <a href="{% url 'store:event_tickets' %}">The Next Frame</a>
+        <a href="{% url 'app:ink_motion' %}">Ink&Motion</a>
         <a href="{% url 'store:workshop_info' %}">Animation Workshop</a>
-        <a href="{% url 'app:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Cantaball World Cup</a>
+        <a href="{% url 'app:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Cantaball</a>
         <a href="{% url 'store:about' %}">About</a>
       </nav>
 
@@ -182,7 +183,7 @@
         {% else %}
           <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">Login</a>
         {% endif %}
-        <a href="{% url 'app:register' %}" class="btn btn-primary btn-sm">Represent a Country</a>
+        <a href="{% url 'store:event_tickets' %}" class="btn btn-primary btn-sm">Get a pass</a>
       </div>
 
       <button class="mobile-toggle" aria-label="Toggle menu">
@@ -196,15 +197,16 @@
     <a href="{% url 'store:shop' %}">Home</a>
     <a href="{% url 'store:shop' %}#food_section">Order From Kohi</a>
     <a href="{% url 'store:event_tickets' %}">The Next Frame</a>
+    <a href="{% url 'app:ink_motion' %}">Ink&Motion</a>
     <a href="{% url 'store:workshop_info' %}">Animation Workshop</a>
-    <a href="{% url 'app:home' %}">Cantaball World Cup</a>
+    <a href="{% url 'app:home' %}">Cantaball</a>
     <a href="{% url 'store:about' %}">About</a>
     {% if request.user.is_authenticated %}
       <a href="{% url 'app:edit_team' %}" class="btn btn-secondary btn-sm">Edit Team</a>
     {% else %}
       <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">Login</a>
     {% endif %}
-    <a href="{% url 'app:register' %}" class="btn btn-primary btn-sm">Represent a Country</a>
+    <a href="{% url 'store:event_tickets' %}" class="btn btn-primary btn-sm">Get a pass</a>
   </div>
 
   <!-- Main Content -->
@@ -224,7 +226,7 @@
             <img src="{% static 'images/cantalogo.png' %}" alt="Kohi Dojo Logo" width='50' style="width: 80px;">
 
           </div>
-          <p>Abia's premier indoor CANTABALL World Cup. Choose your country, compete for the title, and be part of something extraordinary.</p>
+          <p>Kohi Dojo brings Cantaball, animation and community together in Aba.</p>
           <div class="footer-socials">
             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -237,9 +239,9 @@
         <div class="footer-links">
           <h4>Quick Links</h4>
           <a href="{% url 'store:shop' %}">Home</a>
-          <a href="{% url 'store:event_tickets' %}">The Next Frame</a>
+          <a href="{% url 'store:event_tickets' %}">The Next Frame · 31 Oct</a>
           <a href="{% url 'store:workshop_info' %}">Animation Workshop</a>
-          <a href="{% url 'app:register' %}">Represent a Country</a>
+          <a href="{% url 'app:home' %}#cantaball">Cantaball mini-tournaments</a>
           <a href="{% url 'app:fixtures' %}">Fixtures</a>
           <a href="{% url 'app:results' %}">Results</a>
         </div>
@@ -274,7 +276,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>2026 Kohi Dojo CANTABALL World Cup. All Rights Reserved.</p>
+        <p>2026 Kohi Dojo · The Next Frame · Aba</p>
       </div>
     </div>
   </footer>
